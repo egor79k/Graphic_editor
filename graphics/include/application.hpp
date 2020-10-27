@@ -1,27 +1,29 @@
-#ifndef APPLICATION_HPP
-#define APPLICATION_HPP
+#ifndef _APPLICATION_HPP_
+#define _APPLICATION_HPP_
 
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include "window.hpp"
+//#include <vector>
+#include "../EngineSet.hpp"
+//#include "window.hpp"
+
+using Engine = SFML_engine;
 
 class Application
 {
 private:
-	sf::RenderWindow rwin;
+	//sf::RenderWindow rwin;
 
-	std::vector<Window *> windows;
+	//std::vector<Window *> windows;
 	
 public:
 	Application (int width, int height, const char *window_header);
 
-	static Application &initialize (int width, int height, const char *window_header);
+	Application (const Application &) = delete;
+
+	Application &operator= (const Application &) = delete;
 
 	void run ();
 
-	void add_window (Window *window);
-
-	sf::RenderWindow &get_rwin ();
+	//void add_window (Window *window);
 };
 
 #endif

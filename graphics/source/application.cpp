@@ -1,33 +1,27 @@
-#include "include/application.hpp"
+#include "../include/application.hpp"
 
 
-Application::Application (int width, int height, const char *window_header) :
-	rwin (sf::VideoMode (width, height), window_header)
-{}
-
-
-Application &Application::initialize (int width, int height, const char *window_header)
+Application::Application (int width, int height, const char *window_header)
 {
-	static Application app (width, height, window_header);
-	return app;
+	Engine::initialize (width, height, window_header);
 }
 
 	
 void Application::run ()
 {
-	while (rwin.isOpen ())
+	while (Engine::working ())
 	{
-		rwin.clear (sf::Color (255, 255, 255));
+		//rwin.clear (sf::Color (255, 255, 255));
 
-		for (int i = 0; i < windows.size (); ++i)
-			windows[i]->draw ();
+		//for (int i = 0; i < windows.size (); ++i)
+		//	windows[i]->draw ();
 
-		sf::Event event;
+		Event event;
 
-		while (rwin.pollEvent (event))
+		while (Engine::poll_event (event))
 		{
-			if (event.type == sf::Event::Closed)
-				rwin.close ();
+			if (event.type == Event::Closed)
+				Engine::exit ();
 /*
 			if (static_cast<int> (event.key.code) == static_cast<int> (sf::Mouse::Left))
 			{
@@ -47,11 +41,11 @@ void Application::run ()
 			}*/
 		}
 
-		rwin.display ();
+		Engine::flush_screen ();
 	}
 }
 
-
+/*
 void Application::add_window (Window *window)
 {
 	windows.push_back (window);
@@ -61,4 +55,4 @@ void Application::add_window (Window *window)
 sf::RenderWindow &Application::get_rwin ()
 {
 	return rwin;
-}
+}*/
