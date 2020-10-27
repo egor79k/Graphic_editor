@@ -1,9 +1,13 @@
-enum Mouse_button
+#ifndef _EVENT_HPP_
+#define _EVENT_HPP_
+
+
+/*enum Mouse_button
 {
 	Left,
 	Right,
 	Middle
-};
+};*/
 
 
 struct Event
@@ -80,3 +84,6 @@ struct Event
 		Mouse_wheel      mouse_wheel;        
 	};*/
 };
+
+
+#endif

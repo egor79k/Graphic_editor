@@ -1,13 +1,20 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-#include <SFML/Graphics.hpp>
+#include "vector2.hpp"
+#include "event.hpp"
 
 class Window
 {
+private:
+	Vector2<int> pos;
+
 public:
 	Window ();
-	virtual void draw () const = 0;
+
+	virtual void draw ();
+
+	virtual bool handle_event (const Event &event);
 };
 
 /*

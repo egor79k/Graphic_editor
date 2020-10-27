@@ -8,12 +8,12 @@ const int Win_h = 500;
 
 int main ()
 {
-	//Application app::initialize (Win_w, Win_h, "Native text");
 	Application app (Win_w, Win_h, "Native text");
 
+	Window win;
+	app.add_window (&win);
+
 	app.run ();
-	//Engine::initialize (Win_w, Win_h, "Native");
-	//SFML_engine::window.setSize (sf::Vector2u (Win_w, Win_h));
 
 	return 0;
 }
