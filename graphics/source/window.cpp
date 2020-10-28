@@ -25,7 +25,7 @@ void Window::draw ()
 bool Window::handle_event (const Event &event)
 {
 	//printf("Event %d handled in Window\n", event.type);
-	return true;
+	return false;
 }
 
 const Vector2<int> Window::get_position () const
@@ -58,7 +58,7 @@ void Rectangle_window::draw ()
 bool Rectangle_window::handle_event (const Event &event)
 {
 	//printf("Event %d handled in Rectangle_window\n", event.type);
-	return true;
+	return false;
 }
 
 const Vector2<int> Rectangle_window::get_size () const
@@ -88,11 +88,11 @@ Texture_window::Texture_window (const char *texture_file, Vector2<int> _pos) :
 
 void Texture_window::draw ()
 {
-	texture.draw_sprite (Window::get_position ());
+	texture.draw_sprite (get_position ());
 }
 
 bool Texture_window::handle_event (const Event &event)
 {
 	//printf("Event %d handled in Texture_window\n", event.type);
-	return true;
+	return false;
 }

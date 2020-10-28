@@ -19,6 +19,7 @@ public:
 class Big_image : public Scrollable_window
 {
 private:
+	static const int Scroll_step = 10;
 	Texture_window image;
 	//Scrollbar scrollbar;
 
@@ -66,9 +67,11 @@ public:
 		Press_set slider;
 	};
 
-	Scrollbar (const Init &init, int _height, Vector2<int> pos, const Color &background = Color::White);
+	Scrollbar (Scrollable_window *swin, const Init &init, int _height, Vector2<int> pos, const Color &background = Color::White);
 
 	virtual void draw ();
+
+	virtual bool handle_event (const Event &event);
 };
 
 
