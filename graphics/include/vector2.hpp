@@ -12,6 +12,8 @@ public:
 	Vector2 ();
 
 	Vector2 (T _x, T _y);
+
+	//Vector2 (const Vector2 &) = default;
 };
 
 

@@ -12,6 +12,8 @@ void Application::run ()
 {
 	while (Engine::working ())
 	{
+		Engine::fill (Color::White);
+
 		for (int i = 0; i < windows.size (); ++i)
 			windows[i]->draw ();
 

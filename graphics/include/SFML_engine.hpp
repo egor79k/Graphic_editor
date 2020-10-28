@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "event.hpp"
+#include "vector2.hpp"
+#include "color.hpp"
 
 
 class SFML_engine
@@ -95,7 +97,28 @@ public:
 
 	static void flush_screen ();
 
+	static void fill (const Color &col);
+
 	static void exit ();
+
+	class Sprite
+	{
+	private:
+		sf::Texture texture;
+		sf::Sprite sprite;
+		
+	public:
+		Sprite (const char *texture_file, const Vector2<int> pos = {0, 0});
+
+		Sprite (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col);
+
+		void draw ();
+	};
+
+	struct draw
+	{
+		static void rectangle (Vector2<int> pos, Vector2<int> size, const Color &col);
+	};
 };
 
 
