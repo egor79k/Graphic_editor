@@ -49,7 +49,7 @@ public:
 class Texture_window : public Window
 {
 private:
-	Engine::Sprite sprite;
+	Engine::Texture texture;
 
 public:
 	Texture_window (const char *texture_file, Vector2<int> _pos);

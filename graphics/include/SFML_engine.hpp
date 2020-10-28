@@ -91,33 +91,43 @@ public:
 
 	static void initialize (int width, int height, const char *window_header);
 
+
 	static bool poll_event (Event &event);
 
 	static bool working ();
+
+	static void exit ();
+
 
 	static void flush_screen ();
 
 	static void fill (const Color &col);
 
-	static void exit ();
 
-	class Sprite
+	static Vector2<uint32_t> get_size ();
+
+
+
+	class Texture
 	{
 	private:
 		sf::Texture texture;
-		sf::Sprite sprite;
+		//sf::Sprite sprite;
 		
 	public:
-		Sprite (const char *texture_file, const Vector2<int> pos = {0, 0});
+		Texture (const char *texture_file);
 
-		Sprite (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col);
-
-		void draw ();
+		void draw_sprite (Vector2<int> pos);
+		void draw_sprite (Vector2<int> pos, const Vector2<Vector2<int>> &area);
+		//Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col);
 	};
+
 
 	struct draw
 	{
 		static void rectangle (Vector2<int> pos, Vector2<int> size, const Color &col);
+		//static void sprite (const Texture &texture, Vector2<int> pos);
+		//static void sprite (const Texture &texture, Vector2<int> pos, const Vector2<Vector2<int>> &area);
 	};
 };
 

@@ -78,7 +78,7 @@ const Color Rectangle_window::get_color () const
 
 Texture_window::Texture_window (const char *texture_file, Vector2<int> _pos) :
 	Window (_pos),
-	sprite (texture_file, _pos)
+	texture (texture_file)
 {}
 
 /*Texture_window::Texture_window (char *_texture, Vector2<int> _pos, Vector2<int> _size, const Color &_color) :
@@ -88,8 +88,7 @@ Texture_window::Texture_window (const char *texture_file, Vector2<int> _pos) :
 
 void Texture_window::draw ()
 {
-	sprite.draw ();
-	//Engine::draw::sprite (texture, Rectangle_window::get_position (), Rectangle_window::get_size (), Rectangle_window::get_color ());
+	texture.draw_sprite (Window::get_position ());
 }
 
 bool Texture_window::handle_event (const Event &event)

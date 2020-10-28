@@ -51,10 +51,14 @@ bool SFML_engine::poll_event (Event &event)
 	return false;
 }
 
-
 bool SFML_engine::working ()
 {
 	return window.isOpen ();
+}
+
+void SFML_engine::exit ()
+{
+	window.close ();
 }
 
 
@@ -63,40 +67,54 @@ void SFML_engine::flush_screen ()
 	window.display ();
 }
 
-
 void SFML_engine::fill (const Color &col)
 {
 	window.clear (sf::Color (col.r, col.g, col.b, col.a));
 }
 
 
-void SFML_engine::exit ()
+Vector2<uint32_t> SFML_engine::get_size ()
 {
-	window.close ();
+	sf::Vector2u size = window.getSize ();
+	return Vector2<uint32_t> (size.x, size.y);
 }
 
 
-SFML_engine::Sprite::Sprite (const char *texture_file, const Vector2<int> pos)
+
+SFML_engine::Texture::Texture (const char *texture_file)
 {
 	texture.loadFromFile (texture_file);
-	sprite.setTexture (texture);
-	sprite.setPosition (pos.x, pos.y);
 }
 
 
-SFML_engine::Sprite::Sprite (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col)
+void SFML_engine::Texture::draw_sprite (Vector2<int> pos)
+{
+	sf::Sprite sprite (texture);
+	sprite.setPosition (pos.x, pos.y);
+	window.draw (sprite);
+}
+
+
+void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<int>> &area)
+{
+	sf::Sprite sprite (texture, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
+	sprite.setPosition (pos.x, pos.y);
+	window.draw (sprite);
+}
+/*
+SFML_engine::Texture::Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col)
 {
 	texture.loadFromFile (texture_file, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
 	sprite.setTexture (texture);
 	sprite.setColor (sf::Color (col.r, col.g, col.b, col.a));
 	//sprite.setTextureRect (sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
-}
-
-
-void SFML_engine::Sprite::draw ()
+}*/
+/*
+void SFML_engine::Texture::draw ()
 {
 	window.draw (sprite);
-}
+}*/
+
 
 
 void SFML_engine::draw::rectangle (Vector2<int> pos, Vector2<int> size, const Color &col)
@@ -107,9 +125,3 @@ void SFML_engine::draw::rectangle (Vector2<int> pos, Vector2<int> size, const Co
 
 	window.draw (rect);
 }
-
-/*
-void SFML_engine::draw::sprite (const char *texture, Vector2<int> pos, Vector2<int> size, const Color &col)
-{
-
-}*/
