@@ -119,6 +119,7 @@ public:
 
 		void draw_sprite (Vector2<int> pos);
 		void draw_sprite (Vector2<int> pos, const Vector2<Vector2<int>> &area);
+		Vector2<uint32_t> get_size ();
 		//Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col);
 	};
 

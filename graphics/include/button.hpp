@@ -1,15 +1,31 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
-#include <SFML/Graphics.hpp>
+#include "window.hpp"
 
-class Button
+class Texture_button : public Window
 {
 private:
-	sf::RectangleShape rectangle;
-	sf::Text text;
+	Engine::Texture *curr_texture;
+	Engine::Texture released_texture;
+	Engine::Texture pressed_texture;
 
 public:
+	Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos);
+
+
+	//bool contains (Vector2<int> point);
+
+	//Texture_window (char *_texture, Vector2<int> _pos, Vector2<i>, Vector2<int> _size = Vector2<int> (), const Color &_col = Color::White);
+
+	virtual void draw ();
+
+	virtual bool handle_event (const Event &event);
+
+	bool contains (int x, int y);
+
+	Vector2<uint32_t> get_size ();
+/*
 	Button (const sf::RectangleShape &_rectangle, const sf::Text &_text);
 
 	void set_position (const sf::Vector2f &pos);
@@ -26,7 +42,7 @@ public:
 
 	virtual void draw (sf::RenderWindow &window) const;
 	
-	virtual void action ();
+	virtual void action ();*/
 };
 
 #endif

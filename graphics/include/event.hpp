@@ -2,13 +2,6 @@
 #define _EVENT_HPP_
 
 
-/*enum Mouse_button
-{
-	Left,
-	Right,
-	Middle
-};*/
-
 
 struct Event
 {
@@ -31,7 +24,7 @@ struct Event
 	};
 
 	Event_type type;
-/*
+
 
 	struct Size
 	{
@@ -61,7 +54,14 @@ struct Event
 
 	struct Mouse_button
 	{
-		Mouse_button button;
+		enum Mouse_buttons
+		{
+			Left,
+			Right,
+			Middle
+		};
+
+		Mouse_buttons button;
 		int           x;      
 		int           y;      
 	};
@@ -82,7 +82,7 @@ struct Event
 		Mouse_move       mouse_move;         
 		Mouse_button     mouse_button;       
 		Mouse_wheel      mouse_wheel;        
-	};*/
+	};
 };
 
 

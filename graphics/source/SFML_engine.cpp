@@ -44,6 +44,20 @@ bool SFML_engine::poll_event (Event &event)
 	if (window.pollEvent (sf_event))
 	{
 		event.type = Event_match[sf_event.type];
+		switch (event.type)
+		{
+			case Event::Mouse_pressed:
+				event.mouse_button.button = (Event::Mouse_button::Mouse_buttons) sf_event.mouseButton.button;
+				event.mouse_button.x = sf_event.mouseButton.x;
+				event.mouse_button.y = sf_event.mouseButton.y;
+				break;
+
+			case Event::Mouse_released:
+				event.mouse_button.button = (Event::Mouse_button::Mouse_buttons) sf_event.mouseButton.button;
+				event.mouse_button.x = sf_event.mouseButton.x;
+				event.mouse_button.y = sf_event.mouseButton.y;
+				break;
+		}
 		//Event_match[sf_event.type].SFML_engine::Match (event, sf_event);
 		return true;
 	}
@@ -100,6 +114,13 @@ void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<
 	sf::Sprite sprite (texture, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
 	sprite.setPosition (pos.x, pos.y);
 	window.draw (sprite);
+}
+
+
+Vector2<uint32_t> SFML_engine::Texture::get_size ()
+{
+	sf::Vector2u size = texture.getSize ();
+	return Vector2<uint32_t> (size.x, size.y);
 }
 /*
 SFML_engine::Texture::Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col)

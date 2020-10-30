@@ -3,5 +3,6 @@
 
 #include "include/application.hpp"
 #include "include/window.hpp"
+#include "include/button.hpp"
 
 #endif

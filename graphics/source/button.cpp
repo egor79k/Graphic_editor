@@ -1,7 +1,55 @@
-#include <iostream>
-#include "include/button.hpp"
+#include "../include/button.hpp"
 
 
+Texture_button::Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos) :
+	Window (_pos),
+	released_texture (released_img),
+	pressed_texture (pressed_img)
+{
+	curr_texture = &released_texture;
+}
+
+
+void Texture_button::draw ()
+{
+	curr_texture->draw_sprite (get_position ());
+}
+
+
+bool Texture_button::handle_event (const Event &event)
+{
+	if (event.type == Event::Mouse_pressed && contains (event.mouse_button.x, event.mouse_button.y))
+	{
+		curr_texture = &pressed_texture;
+		return true;
+	}
+
+	if (event.type == Event::Mouse_released && contains (event.mouse_button.x, event.mouse_button.y))
+	{
+		curr_texture = &released_texture;
+		return true;
+	}	
+
+	return false;
+}
+
+
+bool Texture_button::contains (int x, int y)
+{
+	Vector2<uint32_t> size = curr_texture->get_size ();
+	Vector2<int> pos = get_position ();
+	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
+}
+
+
+Vector2<uint32_t> Texture_button::get_size ()
+{
+	return curr_texture->get_size ();
+}
+
+
+
+/*
 Button::Button (const sf::RectangleShape &_rectangle, const sf::Text &_text) :
 	rectangle (_rectangle),
 	text (_text)
@@ -55,4 +103,4 @@ void Button::draw (sf::RenderWindow &window) const
 void Button::action ()
 {
 	printf ("Abstract Action\n");
-}
+}*/
