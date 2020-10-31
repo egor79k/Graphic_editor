@@ -38,6 +38,11 @@ void Window::set_position (const Vector2<int> _pos)
 	pos = _pos;
 }
 
+void Window::set_position (const int x, const int y)
+{
+	pos = Vector2<int> (x, y);
+}
+
 
 //========================
 // class Rectangle_window

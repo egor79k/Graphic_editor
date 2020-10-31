@@ -24,6 +24,8 @@ public:
 
 	bool contains (int x, int y);
 
+	bool pressed ();
+
 	Vector2<uint32_t> get_size ();
 /*
 	Button (const sf::RectangleShape &_rectangle, const sf::Text &_text);

@@ -24,6 +24,8 @@ public:
 	const Vector2<int> get_position () const;
 
 	void set_position (const Vector2<int> _pos);
+
+	void set_position (const int x, const int y);
 };
 
 

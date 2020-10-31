@@ -28,6 +28,12 @@ bool Scrollbar::handle_event (const Event &event)
 
 	slider.handle_event (event);
 
+	if (slider.pressed () && event.type == Event::Mouse_moved)
+	{
+		printf("CP: %d:%d NP: %d:%d\n", slider.get_position ().x, slider.get_position ().y, event.mouse_move.x, event.mouse_move.y);
+		slider.set_position (slider.get_position ().x, event.mouse_move.y);
+	}
+
 	return false;
 }
 

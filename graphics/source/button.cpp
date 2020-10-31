@@ -24,7 +24,7 @@ bool Texture_button::handle_event (const Event &event)
 		return true;
 	}
 
-	if (event.type == Event::Mouse_released && contains (event.mouse_button.x, event.mouse_button.y))
+	if (event.type == Event::Mouse_released)
 	{
 		curr_texture = &released_texture;
 		return true;
@@ -39,6 +39,12 @@ bool Texture_button::contains (int x, int y)
 	Vector2<uint32_t> size = curr_texture->get_size ();
 	Vector2<int> pos = get_position ();
 	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
+}
+
+
+bool Texture_button::pressed ()
+{
+	return &pressed_texture == curr_texture;
 }
 
 
