@@ -101,3 +101,13 @@ bool Texture_window::handle_event (const Event &event)
 	//printf("Event %d handled in Texture_window\n", event.type);
 	return false;
 }
+
+void Texture_window::draw (Vector2<Vector2<uint32_t>> area)
+{
+	texture.draw_sprite (get_position (), area);
+}
+
+Vector2<uint32_t> Texture_window::get_size ()
+{
+	return texture.get_size ();
+}

@@ -5,8 +5,7 @@
 
 
 const int Win_w = 1080;
-const int Win_h = 500;
-const char Down[] = "textures/arrow_up_released.png";
+const int Win_h = 700;
 
 const Scrollbar_init init = {
 	{"textures/arrow_up_released.png", "textures/arrow_up_pressed.png"},
@@ -14,8 +13,14 @@ const Scrollbar_init init = {
 	{"textures/slider_released.png", "textures/slider_pressed.png"}
 };
 
-int main ()
+int main (int argc, char *argv[])
 {
+	if (argc != 2)
+	{
+		printf("Wrong arguments!\n");
+		return 0;
+	}
+
 	Application app (Win_w, Win_h, "Native text");
 
 
@@ -32,7 +37,7 @@ int main ()
 	//Scrollbar scroll (init, 200, Vector2<int> (400, 0));
 	//app.add_window (&scroll);
 
-	Big_image bimg ("Cat.jpg");
+	Big_image bimg (argv[1], {100, 100}, {700, 400});
 	app.add_window (&bimg);
 
 	app.run ();

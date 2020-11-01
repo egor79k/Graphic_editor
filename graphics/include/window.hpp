@@ -1,7 +1,6 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-//#include <iostream>
 #include "../EngineSet.hpp"
 #include "vector2.hpp"
 #include "event.hpp"
@@ -61,6 +60,10 @@ public:
 	virtual void draw ();
 
 	virtual bool handle_event (const Event &event);
+
+	void draw (Vector2<Vector2<uint32_t>> area);
+
+	Vector2<uint32_t> get_size ();
 };
 
 

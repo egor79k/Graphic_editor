@@ -138,7 +138,7 @@ void SFML_engine::Texture::draw_sprite (Vector2<int> pos)
 }
 
 
-void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<int>> &area)
+void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<uint32_t>> &area)
 {
 	sf::Sprite sprite (texture, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
 	sprite.setPosition (pos.x, pos.y);
