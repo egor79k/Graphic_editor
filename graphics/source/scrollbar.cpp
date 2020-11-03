@@ -8,6 +8,7 @@ Scrollable_window::Scrollable_window (Vector2<int> _pos) :
 
 
 Scrollbar::Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _height, const Scrollbar_init &init, const Color &background) :
+	Window (pos),
 	scroll_window (swin),
 	height (_height),
 	arrow_up (init.up.released, init.up.pressed, pos),
@@ -24,6 +25,7 @@ Scrollbar::Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _heigh
 
 void Scrollbar::draw ()
 {
+	Engine::draw::rectangle (get_position (), Vector2<uint32_t> (arrow_up.get_size ().x, height), Color::White);
 	arrow_up.draw ();
 	arrow_down.draw ();
 	slider.draw ();
@@ -43,7 +45,6 @@ bool Scrollbar::handle_event (const Event &event)
 	{
 		slider.set_position (slider.get_position ().x, slider.get_position ().y + (slider_pos_down - slider_pos_up) * scroll_window->scroll_str (1));
 	}
-		//scroll_window->scroll_str (-1);
 
 	if (slider.handle_event (event) && event.type == Event::Mouse_pressed)
 		cursor_in_slider_offset = event.mouse_button.y - slider.get_position ().y;
@@ -74,17 +75,18 @@ Big_image::Big_image (const char *file, Vector2<int> _pos, Vector2<uint32_t> _si
 	img_offset (),
 	size (_size),
 	image (file, _pos),
-	scrollbar (this, Vector2<int> (_size.x - Default_scrollbar::Width, _pos.y), _size.y)
+	scrollbar (this, Vector2<int> (_pos.x + _size.x - Default_scrollbar::Width, _pos.y), _size.y)
 {
 	Scroll_len = image.get_size ().y - _size.y;
 	Scroll_step_percent = (double) Scroll_step / Scroll_len;
+	//printf("Window %d:%d, Scbr position %d:%d\n", size.x, size.y, _pos.x + _size.x - Default_scrollbar::Width, _pos.y);
+	fflush (stdout);
 }
 
 void Big_image::draw ()
 {
-	//image.draw ({{0, 910}, {700, 1310}});
 	image.draw (Vector2<Vector2<uint32_t>> (img_offset, size));
-	printf("Draw img %d : %d | %d : %d\n", img_offset.x, img_offset.y, (img_offset + size).x, (img_offset + size).y);
+	//printf("Draw img %d : %d | %d : %d\n", img_offset.x, img_offset.y, (img_offset + size).x, (img_offset + size).y);
 	scrollbar.draw ();
 }
 
@@ -102,7 +104,6 @@ double Big_image::scroll_str     (int delta)
 	}*/
 
 		img_offset.y += delta * Scroll_step;
-		//image.set_position (image.get_position () + Vector2<int>(0, delta * Scroll_step));
 		return Scroll_step_percent;
 }
 
@@ -115,7 +116,6 @@ void Big_image::scroll_percent (double percent)
 {
 	img_offset.y = (double) Scroll_len * percent;
 	//printf ("Scroll mile on %f | %f\n", percent, Scroll_step_percent);
-	//image.set_position (image.get_position ().x, -(double) Scroll_len * percent);
 }
 
 void Big_image::scroll_home    ()

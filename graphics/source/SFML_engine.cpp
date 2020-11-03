@@ -21,6 +21,7 @@ void SFML_engine::Match_size (Event &event, sf::Event &sf_event)
 
 void SFML_engine::Match_key (Event &event, sf::Event &sf_event)
 {
+	event.key.code = (Keyboard::Key) sf_event.key.code;
 	event.key.alt = sf_event.key.alt;
 	event.key.control = sf_event.key.control;
 	event.key.shift = sf_event.key.shift;
@@ -40,7 +41,7 @@ void SFML_engine::Match_mouse_move (Event &event, sf::Event &sf_event)
 
 void SFML_engine::Match_mouse_button (Event &event, sf::Event &sf_event)
 {
-	event.mouse_button.button = (Event::Mouse_button::Mouse_buttons) sf_event.mouseButton.button;
+	event.mouse_button.button = (Mouse::Button) sf_event.mouseButton.button;
 	event.mouse_button.x = sf_event.mouseButton.x;
 	event.mouse_button.y = sf_event.mouseButton.y;
 }
@@ -167,7 +168,7 @@ void SFML_engine::Texture::draw ()
 
 
 
-void SFML_engine::draw::rectangle (Vector2<int> pos, Vector2<int> size, const Color &col)
+void SFML_engine::draw::rectangle (Vector2<int> pos, Vector2<uint32_t> size, const Color &col)
 {
 	sf::RectangleShape rect (sf::Vector2f (size.x, size.y));
 	rect.setPosition (pos.x, pos.y);

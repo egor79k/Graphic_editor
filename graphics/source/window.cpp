@@ -48,7 +48,7 @@ void Window::set_position (const int x, const int y)
 // class Rectangle_window
 //========================
 
-Rectangle_window::Rectangle_window (Vector2<int> _pos, Vector2<int> _size, const Color &_color) :
+Rectangle_window::Rectangle_window (Vector2<int> _pos, Vector2<uint32_t> _size, const Color &_color) :
 		Window (_pos),
 		size (_size),
 		color (_color)
@@ -66,7 +66,7 @@ bool Rectangle_window::handle_event (const Event &event)
 	return false;
 }
 
-const Vector2<int> Rectangle_window::get_size () const
+const Vector2<uint32_t> Rectangle_window::get_size () const
 {
 	return size;
 }

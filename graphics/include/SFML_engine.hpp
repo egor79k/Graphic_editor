@@ -70,7 +70,7 @@ public:
 
 	struct draw
 	{
-		static void rectangle (Vector2<int> pos, Vector2<int> size, const Color &col);
+		static void rectangle (Vector2<int> pos, Vector2<uint32_t> size, const Color &col);
 		//static void sprite (const Texture &texture, Vector2<int> pos);
 		//static void sprite (const Texture &texture, Vector2<int> pos, const Vector2<Vector2<int>> &area);
 	};

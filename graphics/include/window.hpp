@@ -31,17 +31,17 @@ public:
 class Rectangle_window : public Window
 {
 private:
-	Vector2<int> size;
+	Vector2<uint32_t> size;
 	Color color;
 
 public:
-	Rectangle_window (Vector2<int> _pos, Vector2<int> _size, const Color &_color = Color::White);
+	Rectangle_window (Vector2<int> _pos, Vector2<uint32_t> _size, const Color &_color = Color::White);
 
 	virtual void draw ();
 
 	virtual bool handle_event (const Event &event);
 
-	const Vector2<int> get_size () const;
+	const Vector2<uint32_t> get_size () const;
 
 	const Color get_color () const;
 };

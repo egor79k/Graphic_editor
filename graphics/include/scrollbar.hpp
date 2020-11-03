@@ -10,11 +10,11 @@ class Scrollable_window : public Window
 public:
 	Scrollable_window (Vector2<int> _pos);
 
-	virtual double scroll_str  (int delta) = 0;
-	virtual double scroll_page (int delta) = 0;
-	virtual void scroll_percent    (double percent) = 0;
-	virtual void scroll_home     () = 0;
-	virtual void scroll_end      () = 0;
+	virtual double scroll_str   (int delta) = 0;
+	virtual double scroll_page  (int delta) = 0;
+	virtual void scroll_percent (double percent) = 0;
+	virtual void scroll_home    () = 0;
+	virtual void scroll_end     () = 0;
 };
 
 
@@ -58,10 +58,6 @@ private:
 	Texture_button arrow_up;
 	Texture_button arrow_down;
 	Texture_button slider;
-	//Rectangle_window background;
-
-	/*static const int windows_num = 4;
-	Window *windows[windows_num];*/
 
 public:
 	Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _height, const Scrollbar_init &init = Default_scrollbar::Texture, const Color &background = Color::White);
