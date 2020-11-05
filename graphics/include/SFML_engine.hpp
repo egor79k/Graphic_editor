@@ -56,7 +56,6 @@ public:
 	{
 	private:
 		sf::Texture texture;
-		//sf::Sprite sprite;
 		
 	public:
 		Texture (const char *texture_file);
@@ -64,15 +63,12 @@ public:
 		void draw_sprite (Vector2<int> pos);
 		void draw_sprite (Vector2<int> pos, const Vector2<Vector2<uint32_t>> &area);
 		Vector2<uint32_t> get_size ();
-		//Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col);
 	};
 
 
 	struct draw
 	{
 		static void rectangle (Vector2<int> pos, Vector2<uint32_t> size, const Color &col);
-		//static void sprite (const Texture &texture, Vector2<int> pos);
-		//static void sprite (const Texture &texture, Vector2<int> pos, const Vector2<Vector2<int>> &area);
 	};
 };
 

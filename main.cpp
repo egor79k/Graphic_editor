@@ -3,15 +3,9 @@
 #include "graphics/include/scrollbar.hpp"
 
 
-
 const int Win_w = 1080;
 const int Win_h = 700;
 
-const Scrollbar_init init = {
-	{"textures/arrow_up_released.png", "textures/arrow_up_pressed.png"},
-	{"textures/arrow_down_released.png", "textures/arrow_down_pressed.png"},
-	{"textures/slider_released.png", "textures/slider_pressed.png"}
-};
 
 int main (int argc, char *argv[])
 {
@@ -23,7 +17,20 @@ int main (int argc, char *argv[])
 
 	Application app (Win_w, Win_h, "Native text");
 
+	Big_image bimg (argv[1], {100, 100}, {900, 500});
+	app.add_window (&bimg);
 
+	app.run ();
+
+	return 0;
+}
+
+/*
+const Scrollbar_init init = {
+	{"textures/arrow_up_released.png", "textures/arrow_up_pressed.png"},
+	{"textures/arrow_down_released.png", "textures/arrow_down_pressed.png"},
+	{"textures/slider_released.png", "textures/slider_pressed.png"}
+};*/
 	// tbut ("textures/arrow_up_released.png", "textures/arrow_up_pressed.png", Vector2<int> (50, 50));
 	//app.add_window (&tbut);
 
@@ -36,11 +43,3 @@ int main (int argc, char *argv[])
 
 	//Scrollbar scroll (init, 200, Vector2<int> (400, 0));
 	//app.add_window (&scroll);
-
-	Big_image bimg (argv[1], {100, 100}, {700, 400});
-	app.add_window (&bimg);
-
-	app.run ();
-
-	return 0;
-}

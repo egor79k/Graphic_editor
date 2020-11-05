@@ -152,19 +152,6 @@ Vector2<uint32_t> SFML_engine::Texture::get_size ()
 	sf::Vector2u size = texture.getSize ();
 	return Vector2<uint32_t> (size.x, size.y);
 }
-/*
-SFML_engine::Texture::Texture (const char *texture_file, const Vector2<Vector2<int>> &area, const Color &col)
-{
-	texture.loadFromFile (texture_file, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
-	sprite.setTexture (texture);
-	sprite.setColor (sf::Color (col.r, col.g, col.b, col.a));
-	//sprite.setTextureRect (sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
-}*/
-/*
-void SFML_engine::Texture::draw ()
-{
-	window.draw (sprite);
-}*/
 
 
 

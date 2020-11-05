@@ -13,11 +13,6 @@ private:
 public:
 	Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos = Vector2<int> ());
 
-
-	//bool contains (Vector2<int> point);
-
-	//Texture_window (char *_texture, Vector2<int> _pos, Vector2<i>, Vector2<int> _size = Vector2<int> (), const Color &_col = Color::White);
-
 	virtual void draw ();
 
 	virtual bool handle_event (const Event &event);
@@ -27,6 +22,10 @@ public:
 	bool pressed ();
 
 	Vector2<uint32_t> get_size ();
+};
+
+
+
 /*
 	Button (const sf::RectangleShape &_rectangle, const sf::Text &_text);
 
@@ -45,6 +44,4 @@ public:
 	virtual void draw (sf::RenderWindow &window) const;
 	
 	virtual void action ();*/
-};
-
 #endif
