@@ -3,6 +3,26 @@
 
 #include "window.hpp"
 
+/*
+class Button : public Window
+{
+private:
+	Vector2<int> pos;
+
+public:
+	virtual void draw () = 0;
+
+	virtual bool handle_event (const Event &event);
+
+	bool on_mouse_click ();
+	bool on_mouse_release ();
+	bool on_mouse_inside ();
+
+
+};
+*/
+
+
 class Texture_button : public Window
 {
 private:

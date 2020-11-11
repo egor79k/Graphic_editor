@@ -6,6 +6,7 @@
 #include "event.hpp"
 #include "color.hpp"
 
+
 class Window
 {
 private:

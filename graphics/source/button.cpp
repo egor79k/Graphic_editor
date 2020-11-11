@@ -1,5 +1,18 @@
 #include "../include/button.hpp"
 
+/*
+Button::Button (Vectro2<int> _pos) :
+	pos (_pos)
+{}
+
+
+bool Button::handle_event (const Event &event)
+{
+	return false;
+}*/
+
+
+
 
 Texture_button::Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos) :
 	Window (_pos),
@@ -52,6 +65,7 @@ Vector2<uint32_t> Texture_button::get_size ()
 {
 	return curr_texture->get_size ();
 }
+
 
 
 

@@ -24,9 +24,10 @@ void Application::run ()
 			if (event.type == Event::Closed)
 				Engine::exit ();
 
-			for (int i = 0; i < windows.size (); ++i)
-				if (windows[i]->handle_event (event))
+			for (auto win: windows)
+				if (win->handle_event (event))
 					break;
+
 		}
 
 		Engine::flush_screen ();
