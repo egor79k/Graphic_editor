@@ -172,7 +172,7 @@ struct Event
 		int y; 
 	};
 
-	struct Mouse_button
+	struct Mouse_click
 	{
 		Mouse::Button button;
 		int           x;      
@@ -193,7 +193,7 @@ struct Event
 		Key              key;               
 		Text             text;              
 		Mouse_move       mouse_move;         
-		Mouse_button     mouse_button;       
+		Mouse_click      mouse_click;       
 		Mouse_wheel      mouse_wheel;        
 	};
 };

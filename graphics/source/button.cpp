@@ -31,7 +31,7 @@ void Texture_button::draw ()
 
 bool Texture_button::handle_event (const Event &event)
 {
-	if (event.type == Event::Mouse_pressed && contains (event.mouse_button.x, event.mouse_button.y))
+	if (event.type == Event::Mouse_pressed && contains (event.mouse_click.x, event.mouse_click.y))
 	{
 		curr_texture = &pressed_texture;
 		return true;

@@ -47,7 +47,7 @@ bool Scrollbar::handle_event (const Event &event)
 	}
 
 	if (slider.handle_event (event) && event.type == Event::Mouse_pressed)
-		cursor_in_slider_offset = event.mouse_button.y - slider.get_position ().y;
+		cursor_in_slider_offset = event.mouse_click.y - slider.get_position ().y;
 
 	if (slider.pressed () && event.type == Event::Mouse_moved)
 	{

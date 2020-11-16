@@ -1,16 +1,55 @@
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
+#include <vector>
 #include "../EngineSet.hpp"
 #include "vector2.hpp"
 #include "event.hpp"
 #include "color.hpp"
 
 
-class Window
+
+class Abstract_window
+{
+protected:
+	std::vector<Abstract_window *> subwindows;
+
+public:
+	Abstract_window () = default;
+
+	virtual void draw () = 0;
+
+	virtual bool handle_mouse_press   (const Event::Mouse_click &click);
+	virtual bool handle_mouse_release (const Event::Mouse_click &click);
+	virtual bool handle_mouse_move    (const Event::Mouse_move &move);
+
+	virtual bool on_mouse_press   (const Event::Mouse_click &click) = 0;
+	virtual bool on_mouse_release (const Event::Mouse_click &click) = 0;
+	virtual bool on_mouse_move    (const Event::Mouse_move &move) = 0;
+};
+
+
+
+class Windows_manager
 {
 private:
+	std::vector<Abstract_window *> windows;
+
+public:
+	Windows_manager () = default;
+
+	void handle_event (const Event &event);
+
+	void add_window (Abstract_window *window);
+};
+
+
+
+class Window
+{
+protected:
 	Vector2<int> pos;
+
 
 public:
 	Window ();
