@@ -39,3 +39,9 @@ void Application::add_window (Window *window)
 {
 	windows.push_back (window);
 }
+
+
+void Application::add_window (Abstract_window *window)
+{
+	win_man.add_window (window);
+}

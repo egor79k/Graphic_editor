@@ -12,6 +12,7 @@ public:
 	uint8_t b;
 	uint8_t a;
 
+	Color ();
 	Color (uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a = 255);
 
 	static const Color White;

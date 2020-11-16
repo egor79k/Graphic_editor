@@ -97,11 +97,11 @@ bool Big_image::handle_event (const Event &event)
 
 double Big_image::scroll_str     (int delta)
 {
-	/*if ((delta > 0 && Scroll_len - image.get_position ().y) < Scroll_step)
-	{
-		image.set_position (image.get_position ().x, get_position ().y);
-		return 
-	}*/
+	//if ((delta > 0 && Scroll_len - image.get_position ().y) < Scroll_step)
+	//{
+	//	image.set_position (image.get_position ().x, get_position ().y);
+	//	return 
+	//}
 
 		img_offset.y += delta * Scroll_step;
 		return Scroll_step_percent;

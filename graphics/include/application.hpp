@@ -11,8 +11,10 @@ class Application
 {
 private:
 	//sf::RenderWindow rwin;
+	Windows_manager win_man;
 
 	std::vector<Window *> windows;
+
 	
 public:
 	Application (int width, int height, const char *window_header);
@@ -24,6 +26,8 @@ public:
 	void run ();
 
 	void add_window (Window *window);
+
+	void add_window (Abstract_window *window);
 };
 
 #endif

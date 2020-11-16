@@ -1,6 +1,11 @@
 #include "../include/color.hpp"
 
 
+Color::Color () :
+	Color (White)
+{}
+
+
 Color::Color (uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _a) :
 	r (_r),
 	g (_g),

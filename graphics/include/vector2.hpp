@@ -13,7 +13,18 @@ public:
 
 	Vector2 (T _x, T _y);
 
-	//Vector2 (const Vector2 &) = default;
+	//-------------------------------------------
+	// TEMPORARY, FOR COMPATIBILITY ONLY
+	operator Vector2<unsigned int> () const
+	{
+		return Vector2<unsigned int> (x, y);
+	}
+
+	operator Vector2<int> () const
+	{
+		return Vector2<int> (x, y);
+	}
+	//-------------------------------------------
 };
 
 
@@ -109,6 +120,11 @@ bool operator!= (const Vector2<T>& l, const Vector2<T>& r)
 {
 	return (l.x != r.x || l.y != r.y);
 }
+
+
+typedef Vector2<int>          Vector2i;
+typedef Vector2<unsigned int> Vector2u;
+typedef Vector2<float>        Vector2f;
 
 
 #endif
