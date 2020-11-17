@@ -1,11 +1,13 @@
 #ifndef _APPLICATION_HPP_
 #define _APPLICATION_HPP_
 
+class Application;
+
 #include <vector>
 #include "../EngineSet.hpp"
+#include "event_system.hpp"
 #include "window.hpp"
 
-using Engine = SFML_engine;
 
 class Application
 {

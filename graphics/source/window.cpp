@@ -5,6 +5,14 @@
 // ::::  Abstract_window  ::::
 //=============================================================================
 
+void Abstract_window::handle_redraw ()
+{
+	for (auto win: subwindows)
+		win->handle_redraw ();
+
+	on_redraw ();
+}
+
 bool Abstract_window::handle_mouse_press (const Event::Mouse_click &click)
 {
 	for (auto win: subwindows)
@@ -80,7 +88,9 @@ void Windows_manager::add_window (Abstract_window *window)
 
 Drawable_window::Drawable_window (Vector2f _pos) :
 	pos (_pos)
-{}
+{
+	Event_system::attach_redraw (this);
+}
 //-----------------------------------------------------------------------------
 
 Drawable_window::Drawable_window (float x, float y) :

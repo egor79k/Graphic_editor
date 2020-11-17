@@ -1,6 +1,10 @@
 #ifndef _SCROLLBAR_HPP_
 #define _SCROLLBAR_HPP_
 
+class Scrollable_window;
+class Scrollbar;
+class Big_image;
+
 #include "window.hpp"
 #include "button.hpp"
 

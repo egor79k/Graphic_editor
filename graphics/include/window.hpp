@@ -1,11 +1,5 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
-
-#include <vector>
-#include "../EngineSet.hpp"
-#include "vector2.hpp"
-#include "event.hpp"
-#include "color.hpp"
+#ifndef _WINDOW_HPP_
+#define _WINDOW_HPP_
 
 
 //=============================================================================
@@ -18,6 +12,19 @@
 //=============================================================================
 
 
+class Abstract_window;
+class Drawable_window;
+class Rectangle_window;
+
+
+#include <vector>
+#include "../EngineSet.hpp"
+#include "vector2.hpp"
+#include "event.hpp"
+#include "event_system.hpp"
+#include "color.hpp"
+
+
 
 //=============================================================================
 class Abstract_window
@@ -28,12 +35,13 @@ protected:
 public:
 	Abstract_window () = default;
 
-	virtual void draw () = 0;
 
+	virtual void handle_redraw ();
 	virtual bool handle_mouse_press   (const Event::Mouse_click &click);
 	virtual bool handle_mouse_release (const Event::Mouse_click &click);
 	virtual bool handle_mouse_move    (const Event::Mouse_move &move);
 
+	virtual void on_redraw () = 0;
 	virtual bool on_mouse_press   (const Event::Mouse_click &click) = 0;
 	virtual bool on_mouse_release (const Event::Mouse_click &click) = 0;
 	virtual bool on_mouse_move    (const Event::Mouse_move &move) = 0;
@@ -148,4 +156,4 @@ public:
 };
 //=============================================================================
 
-#endif
+#endif // _WINDOW_HPP_

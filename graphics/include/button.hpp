@@ -1,6 +1,9 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
+class Texture_button;
+
+
 #include "window.hpp"
 
 /*
