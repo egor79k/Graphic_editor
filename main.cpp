@@ -18,6 +18,7 @@ int main (int argc, char *argv[])
 	Application::initialize (Win_w, Win_h, "Native text");
 
 	Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
+	Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
 	//app.add_window (&rect);
 	
 
