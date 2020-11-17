@@ -11,23 +11,24 @@ class Application
 {
 private:
 	//sf::RenderWindow rwin;
-	Windows_manager win_man;
 
-	std::vector<Window *> windows;
+	static std::vector<Window *> windows;
 
 	
 public:
-	Application (int width, int height, const char *window_header);
+	//Application (int width, int height, const char *window_header);
 
-	Application (const Application &) = delete;
+	//Application (const Application &) = delete;
 
-	Application &operator= (const Application &) = delete;
+	//Application &operator= (const Application &) = delete;
 
-	void run ();
+	static void initialize (int width, int height, const char *window_header);
 
-	void add_window (Window *window);
+	static void run ();
 
-	void add_window (Abstract_window *window);
+	static void add_window (Window *window);
+
+	//void add_window (Abstract_window *window);
 };
 
 #endif

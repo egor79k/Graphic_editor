@@ -1,12 +1,13 @@
 #include "../include/application.hpp"
 
 
-Application::Application (int width, int height, const char *window_header) :
-	windows (std::vector<Window *> ())
+void Application::initialize (int width, int height, const char *window_header)
 {
 	Engine::initialize (width, height, window_header);
 }
 
+
+std::vector<Window *> Application::windows;
 	
 void Application::run ()
 {
@@ -14,8 +15,8 @@ void Application::run ()
 	{
 		Engine::fill (Color::White);
 
-		for (int i = 0; i < windows.size (); ++i)
-			windows[i]->draw ();
+		for (auto win: windows)
+			win->draw ();
 
 		Event event;
 
@@ -40,8 +41,8 @@ void Application::add_window (Window *window)
 	windows.push_back (window);
 }
 
-
+/*
 void Application::add_window (Abstract_window *window)
 {
 	win_man.add_window (window);
-}
+}*/

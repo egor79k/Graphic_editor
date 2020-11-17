@@ -15,12 +15,16 @@ int main (int argc, char *argv[])
 		return 0;
 	}
 
-	Application app (Win_w, Win_h, "Native text");
+	Application::initialize (Win_w, Win_h, "Native text");
+
+	//Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
+	//app.add_window (&rect);
+	
 
 	Big_image bimg (argv[1], {100, 100}, {900, 500});
-	app.add_window (&bimg);
+	Application::add_window (&bimg);
 
-	app.run ();
+	Application::run ();
 
 	return 0;
 }

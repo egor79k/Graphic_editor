@@ -28,6 +28,8 @@ protected:
 public:
 	Abstract_window () = default;
 
+	virtual void draw () = 0;
+
 	virtual bool handle_mouse_press   (const Event::Mouse_click &click);
 	virtual bool handle_mouse_release (const Event::Mouse_click &click);
 	virtual bool handle_mouse_move    (const Event::Mouse_move &move);
@@ -39,7 +41,7 @@ public:
 //=============================================================================
 
 
-
+/*
 //=============================================================================
 class Windows_manager
 {
@@ -49,12 +51,14 @@ private:
 public:
 	Windows_manager () = default;
 
+	void draw ();
+
 	void handle_event (const Event &event);
 
 	void add_window (Abstract_window *window);
 };
 //=============================================================================
-
+*/
 
 
 //=============================================================================
@@ -67,8 +71,6 @@ public:
 	Drawable_window () = default;
 	Drawable_window (Vector2f _pos);
 	Drawable_window (float x, float y);
-
-	virtual void draw () = 0;
 
 	const Vector2f &get_position () const;
 	void set_position (const Vector2f &_pos);
