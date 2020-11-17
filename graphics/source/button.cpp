@@ -14,7 +14,7 @@ bool Button::handle_event (const Event &event)
 
 
 
-Texture_button::Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos) :
+Texture_button::Texture_button (const char *released_img, const char *pressed_img, Vector2f _pos) :
 	Window (_pos),
 	released_texture (released_img),
 	pressed_texture (pressed_img)
@@ -25,7 +25,7 @@ Texture_button::Texture_button (const char *released_img, const char *pressed_im
 
 void Texture_button::draw ()
 {
-	curr_texture->draw_sprite (get_position ());
+	curr_texture->draw_sprite (pos);
 }
 
 

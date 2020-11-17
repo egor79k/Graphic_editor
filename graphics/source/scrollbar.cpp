@@ -1,13 +1,13 @@
 #include "../include/scrollbar.hpp"
 
 
-Scrollable_window::Scrollable_window (Vector2<int> _pos) :
+Scrollable_window::Scrollable_window (Vector2f _pos) :
 	Window (_pos)
 {}
 
 
 
-Scrollbar::Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _height, const Scrollbar_init &init, const Color &background) :
+Scrollbar::Scrollbar (Scrollable_window *swin, Vector2f pos, uint32_t _height, const Scrollbar_init &init, const Color &background) :
 	Window (pos),
 	scroll_window (swin),
 	height (_height),
@@ -25,7 +25,7 @@ Scrollbar::Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _heigh
 
 void Scrollbar::draw ()
 {
-	Engine::draw::rectangle (get_position (), Vector2<uint32_t> (arrow_up.get_size ().x, height), Color::White);
+	Engine::draw::rectangle (pos, Vector2f (arrow_up.get_size ().x, height), Color::White);
 	arrow_up.draw ();
 	arrow_down.draw ();
 	slider.draw ();
@@ -70,12 +70,12 @@ bool Scrollbar::handle_event (const Event &event)
 
 
 
-Big_image::Big_image (const char *file, Vector2<int> _pos, Vector2<uint32_t> _size) :
+Big_image::Big_image (const char *file, const Vector2f &_pos, const Vector2f &_size) :
 	Scrollable_window (_pos),
 	img_offset (),
 	size (_size),
 	image (file, _pos),
-	scrollbar (this, Vector2<int> (_pos.x + _size.x - Default_scrollbar::Width, _pos.y), _size.y)
+	scrollbar (this, Vector2f (_pos.x + _size.x - Default_scrollbar::Width, _pos.y), _size.y)
 {
 	Scroll_len = image.get_size ().y - _size.y;
 	Scroll_step_percent = (double) Scroll_step / Scroll_len;
@@ -85,7 +85,7 @@ Big_image::Big_image (const char *file, Vector2<int> _pos, Vector2<uint32_t> _si
 
 void Big_image::draw ()
 {
-	image.draw (Vector2<Vector2<uint32_t>> (img_offset, size));
+	image.draw (Vector2<Vector2f> (img_offset, size));
 	//printf("Draw img %d : %d | %d : %d\n", img_offset.x, img_offset.y, (img_offset + size).x, (img_offset + size).y);
 	scrollbar.draw ();
 }

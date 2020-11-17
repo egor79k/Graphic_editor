@@ -12,7 +12,7 @@ class Big_image;
 class Scrollable_window : public Window
 {
 public:
-	Scrollable_window (Vector2<int> _pos);
+	Scrollable_window (Vector2f _pos);
 
 	virtual double scroll_str   (int delta) = 0;
 	virtual double scroll_page  (int delta) = 0;
@@ -64,7 +64,7 @@ private:
 	Texture_button slider;
 
 public:
-	Scrollbar (Scrollable_window *swin, Vector2<int> pos, uint32_t _height, const Scrollbar_init &init = Default_scrollbar::Texture, const Color &background = Color::White);
+	Scrollbar (Scrollable_window *swin, Vector2f pos, uint32_t _height, const Scrollbar_init &init = Default_scrollbar::Texture, const Color &background = Color::White);
 
 	virtual void draw ();
 
@@ -76,8 +76,8 @@ public:
 class Big_image : public Scrollable_window
 {
 private:
-	Vector2<uint32_t> img_offset;
-	Vector2<uint32_t> size;
+	Vector2f img_offset;
+	Vector2f size;
 	static const uint32_t Scroll_step = 10;
 	uint32_t Scroll_len;
 	double Scroll_step_percent;
@@ -85,7 +85,7 @@ private:
 	Scrollbar scrollbar;
 
 public:
-	Big_image (const char *file, Vector2<int> _pos = Vector2<int> (), Vector2<uint32_t> _size = Engine::get_size ());
+	Big_image (const char *file, const Vector2f &_pos = Vector2f (), const Vector2f &_size = Vector2f (Engine::get_size ().x, Engine::get_size ().y));
 
 	virtual void draw ();
 

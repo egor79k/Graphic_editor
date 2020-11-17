@@ -20,7 +20,7 @@ public:
 
 	static void Match_mouse_move (Event &event, sf::Event &sf_event);
 
-	static void Match_mouse_button (Event &event, sf::Event &sf_event);
+	static void Match_mouse_click (Event &event, sf::Event &sf_event);
 
 	static void Match_mouse_wheel (Event &event, sf::Event &sf_event);
 
@@ -60,15 +60,15 @@ public:
 	public:
 		Texture (const char *texture_file);
 
-		void draw_sprite (Vector2<int> pos);
-		void draw_sprite (Vector2<int> pos, const Vector2<Vector2<uint32_t>> &area);
-		Vector2<uint32_t> get_size ();
+		void draw_sprite (const Vector2f &pos);
+		void draw_sprite (const Vector2f &pos, const Vector2<Vector2f> &area);
+		Vector2f get_size ();
 	};
 
 
 	struct draw
 	{
-		static void rectangle (Vector2<int> pos, Vector2<uint32_t> size, const Color &col);
+		static void rectangle (const Vector2f &pos, const Vector2f &size, const Color &col);
 	};
 };
 

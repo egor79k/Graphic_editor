@@ -39,11 +39,11 @@ void SFML_engine::Match_mouse_move (Event &event, sf::Event &sf_event)
 	event.mouse_move.y = sf_event.mouseMove.y;
 }
 
-void SFML_engine::Match_mouse_button (Event &event, sf::Event &sf_event)
+void SFML_engine::Match_mouse_click (Event &event, sf::Event &sf_event)
 {
-	event.mouse_button.button = (Mouse::Button) sf_event.mouseButton.button;
-	event.mouse_button.x = sf_event.mouseButton.x;
-	event.mouse_button.y = sf_event.mouseButton.y;
+	event.mouse_click.button = (Mouse::Button) sf_event.mouseButton.button;
+	event.mouse_click.x = sf_event.mouseButton.x;
+	event.mouse_click.y = sf_event.mouseButton.y;
 }
 
 void SFML_engine::Match_mouse_wheel (Event &event, sf::Event &sf_event)
@@ -66,8 +66,8 @@ bool SFML_engine::poll_event (Event &event)
 		{Event::Key_released, Match_key},
 		{Event::Mouse_wheel_moved, Match_mouse_wheel},
 		{Event::Unused_event, Match_empty},
-		{Event::Mouse_pressed, Match_mouse_button},
-		{Event::Mouse_released, Match_mouse_button},
+		{Event::Mouse_pressed, Match_mouse_click},
+		{Event::Mouse_released, Match_mouse_click},
 		{Event::Mouse_moved, Match_mouse_move},
 		{Event::Mouse_went_in, Match_empty},
 		{Event::Mouse_went_out, Match_empty},
@@ -131,7 +131,7 @@ SFML_engine::Texture::Texture (const char *texture_file)
 }
 
 
-void SFML_engine::Texture::draw_sprite (Vector2<int> pos)
+void SFML_engine::Texture::draw_sprite (const Vector2f &pos)
 {
 	sf::Sprite sprite (texture);
 	sprite.setPosition (pos.x, pos.y);
@@ -139,7 +139,7 @@ void SFML_engine::Texture::draw_sprite (Vector2<int> pos)
 }
 
 
-void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<uint32_t>> &area)
+void SFML_engine::Texture::draw_sprite (const Vector2f &pos, const Vector2<Vector2f> &area)
 {
 	sf::Sprite sprite (texture, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
 	sprite.setPosition (pos.x, pos.y);
@@ -147,15 +147,15 @@ void SFML_engine::Texture::draw_sprite (Vector2<int> pos, const Vector2<Vector2<
 }
 
 
-Vector2<uint32_t> SFML_engine::Texture::get_size ()
+Vector2f SFML_engine::Texture::get_size ()
 {
 	sf::Vector2u size = texture.getSize ();
-	return Vector2<uint32_t> (size.x, size.y);
+	return Vector2f (size.x, size.y);
 }
 
 
 
-void SFML_engine::draw::rectangle (Vector2<int> pos, Vector2<uint32_t> size, const Color &col)
+void SFML_engine::draw::rectangle (const Vector2f &pos, const Vector2f &size, const Color &col)
 {
 	sf::RectangleShape rect (sf::Vector2f (size.x, size.y));
 	rect.setPosition (pos.x, pos.y);

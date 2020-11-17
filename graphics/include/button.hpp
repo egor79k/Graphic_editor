@@ -34,7 +34,7 @@ private:
 	Engine::Texture pressed_texture;
 
 public:
-	Texture_button (const char *released_img, const char *pressed_img, Vector2<int> _pos = Vector2<int> ());
+	Texture_button (const char *released_img, const char *pressed_img, Vector2f _pos = Vector2f ());
 
 	virtual void draw ();
 

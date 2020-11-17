@@ -8,12 +8,21 @@
 //    standart virtual event handlers and contains definitions of abstract
 //    functions to react on events.
 //
-// [] Windows_manager
+// [] Window
+//    Base class for all GUI elements, witch are related to Engine window and
+//    have position into it. Window overrides all abstract event reactions as
+//    do-nothing functions.
+//
+// [] Rectangle_window
+//    A basic rectangle with size and color.
+//
+// [] Texture_window
+//    
 //=============================================================================
 
 
 class Abstract_window;
-class Drawable_window;
+class Window;
 class Rectangle_window;
 
 
@@ -51,34 +60,19 @@ public:
 
 
 //=============================================================================
-class Drawable_window : public Abstract_window
+class Window : public Abstract_window
 {
 protected:
 	Vector2f pos;
 
 public:
-	Drawable_window () = default;
-	Drawable_window (Vector2f _pos);
-	Drawable_window (float x, float y);
+	Window () = default;
+	Window (Vector2f _pos);
+	Window (float x, float y);
 
 	const Vector2f &get_position () const;
 	void set_position (const Vector2f &_pos);
 	void set_position (const float x, const float y);
-};
-//=============================================================================
-
-
-
-//=============================================================================
-class Rectangle_window : public Drawable_window
-{
-private:
-	Vector2f size;
-	Color color;
-
-public:
-	Rectangle_window () = default;
-	Rectangle_window (const Vector2f &_pos, const Vector2f &_size, const Color &_color = Color::White);
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
@@ -89,6 +83,28 @@ public:
 
 
 
+//=============================================================================
+class Rectangle_window : public Window
+{
+protected:
+	Vector2f size;
+	Color color;
+
+public:
+	Rectangle_window () = default;
+	Rectangle_window (const Vector2f &_pos, const Vector2f &_size, const Color &_color = Color::White);
+
+	const Vector2f &get_size ();
+	const Color &get_color ();
+	void set_size (const Vector2f &sz);
+	void set_color (const Color &col);
+
+	virtual void on_redraw ();
+};
+//=============================================================================
+
+
+/*
 //=============================================================================
 class Window
 {
@@ -112,27 +128,25 @@ public:
 	void set_position (const int x, const int y);
 };
 //=============================================================================
-
+*/
 
 
 //=============================================================================
 class Texture_window : public Window
 {
-private:
+protected:
 	Engine::Texture texture;
 
 public:
-	Texture_window (const char *texture_file, Vector2<int> _pos);
+	Texture_window (const char *texture_file, const Vector2f &_pos);
 
 	//Texture_window (char *_texture, Vector2<int> _pos, Vector2<i>, Vector2<int> _size = Vector2<int> (), const Color &_col = Color::White);
 
-	virtual void draw ();
+	virtual void on_redraw ();
 
-	virtual bool handle_event (const Event &event);
+	void draw (const Vector2<Vector2f> &area);
 
-	void draw (Vector2<Vector2<uint32_t>> area);
-
-	Vector2<uint32_t> get_size ();
+	Vector2f get_size ();
 };
 //=============================================================================
 
