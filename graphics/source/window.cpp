@@ -44,43 +44,6 @@ bool Abstract_window::handle_mouse_move (const Event::Mouse_move &move)
 //=============================================================================
 
 
-/*
-//=============================================================================
-// ::::  Windows_manager  ::::
-//=============================================================================
-
-void Windows_manager::handle_event (const Event &event)
-{
-	switch (event.type)
-	{
-		case Event::Mouse_pressed:
-			for (auto win: windows)
-				if (win->handle_mouse_press (event.mouse_click))
-					break;
-			break;
-
-		case Event::Mouse_released:
-			for (auto win: windows)
-				if (win->handle_mouse_release (event.mouse_click))
-					break;
-			break;
-
-		case Event::Mouse_moved:
-			for (auto win: windows)
-				if (win->handle_mouse_move (event.mouse_move))
-					break;
-			break;
-	}
-}
-//-----------------------------------------------------------------------------
-
-void Windows_manager::add_window (Abstract_window *window)
-{
-	windows.push_back (window);
-}
-//=============================================================================
-*/
-
 
 //=============================================================================
 // ::::  Drawable_window  ::::
@@ -129,7 +92,7 @@ Rectangle_window::Rectangle_window (const Vector2f &_pos, const Vector2f &_size,
 	{}
 //-----------------------------------------------------------------------------
 
-void Rectangle_window::draw ()
+void Rectangle_window::on_redraw ()
 {
 	Engine::draw::rectangle (pos, size, color);
 	//puts ("Rectangle_window draw!\n");

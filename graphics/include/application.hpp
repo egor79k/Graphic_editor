@@ -29,8 +29,6 @@ public:
 	static void run ();
 
 	static void add_window (Window *window);
-
-	//void add_window (Abstract_window *window);
 };
 
 #endif

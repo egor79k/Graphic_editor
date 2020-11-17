@@ -49,25 +49,6 @@ public:
 //=============================================================================
 
 
-/*
-//=============================================================================
-class Windows_manager
-{
-private:
-	std::vector<Abstract_window *> windows;
-
-public:
-	Windows_manager () = default;
-
-	void draw ();
-
-	void handle_event (const Event &event);
-
-	void add_window (Abstract_window *window);
-};
-//=============================================================================
-*/
-
 
 //=============================================================================
 class Drawable_window : public Abstract_window
@@ -99,8 +80,7 @@ public:
 	Rectangle_window () = default;
 	Rectangle_window (const Vector2f &_pos, const Vector2f &_size, const Color &_color = Color::White);
 
-	virtual void draw ();
-
+	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
 	virtual bool on_mouse_release (const Event::Mouse_click &click);
 	virtual bool on_mouse_move    (const Event::Mouse_move &move);
