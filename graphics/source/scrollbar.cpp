@@ -7,13 +7,13 @@ Scrollable_window::Scrollable_window (Vector2f _pos) :
 
 
 
-Scrollbar::Scrollbar (Scrollable_window *swin, Vector2f pos, uint32_t _height, const Scrollbar_init &init, const Color &background) :
+Scrollbar::Scrollbar (Scrollable_window *swin, const Vector2f &pos, uint32_t _height, const Scrollbar_init &init, const Color &background) :
 	Window (pos),
 	scroll_window (swin),
 	height (_height),
-	arrow_up (init.up.released, init.up.pressed, pos),
-	arrow_down (init.down.released, init.down.pressed),
-	slider (init.slider.released, init.slider.pressed)
+	arrow_up ({init.up.released, init.up.released, init.up.pressed}, pos),
+	arrow_down ({init.down.released, init.down.released, init.down.pressed}),
+	slider ({init.slider.released, init.slider.released, init.slider.pressed})
 {
 	slider_pos_up = pos.y + arrow_up.get_size ().y;
 	slider_pos_down = pos.y + height - arrow_down.get_size ().y - slider.get_size ().y;
@@ -23,15 +23,15 @@ Scrollbar::Scrollbar (Scrollable_window *swin, Vector2f pos, uint32_t _height, c
 }
 
 
-void Scrollbar::draw ()
+void Scrollbar::on_redraw ()
 {
 	Engine::draw::rectangle (pos, Vector2f (arrow_up.get_size ().x, height), Color::White);
-	arrow_up.draw ();
-	arrow_down.draw ();
-	slider.draw ();
+	arrow_up.on_redraw ();
+	arrow_down.on_redraw ();
+	slider.on_redraw ();
 }
 
-
+/*
 bool Scrollbar::handle_event (const Event &event)
 {
 	static int cursor_in_slider_offset;
@@ -67,7 +67,7 @@ bool Scrollbar::handle_event (const Event &event)
 
 	return false;
 }
-
+*/
 
 
 Big_image::Big_image (const char *file, const Vector2f &_pos, const Vector2f &_size) :
@@ -83,18 +83,18 @@ Big_image::Big_image (const char *file, const Vector2f &_pos, const Vector2f &_s
 	fflush (stdout);
 }
 
-void Big_image::draw ()
+void Big_image::on_redraw ()
 {
 	image.draw (Vector2<Vector2f> (img_offset, size));
 	//printf("Draw img %d : %d | %d : %d\n", img_offset.x, img_offset.y, (img_offset + size).x, (img_offset + size).y);
-	scrollbar.draw ();
+	scrollbar.on_redraw ();
 }
-
+/*
 bool Big_image::handle_event (const Event &event)
 {
 	return scrollbar.handle_event (event);
 }
-
+*/
 double Big_image::scroll_str     (int delta)
 {
 	//if ((delta > 0 && Scroll_len - image.get_position ().y) < Scroll_step)

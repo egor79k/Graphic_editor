@@ -51,7 +51,7 @@ template<typename T>
 Vector2<T>& operator+= (Vector2<T>& l, const Vector2<T>& r)
 {
 	l.x += r.x;
-	l.y += l.y;
+	l.y += r.y;
 	return l;
 }
 
@@ -59,7 +59,7 @@ template<typename T>
 Vector2<T>& operator-= (Vector2<T>& l, const Vector2<T>& r)
 {
 	l.x -= r.x;
-	l.y -= l.y;
+	l.y -= r.y;
 	return l;
 }
 

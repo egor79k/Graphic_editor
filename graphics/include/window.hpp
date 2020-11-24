@@ -146,7 +146,7 @@ public:
 
 	void draw (const Vector2<Vector2f> &area);
 
-	Vector2f get_size ();
+	const Vector2f get_size ();
 };
 //=============================================================================
 

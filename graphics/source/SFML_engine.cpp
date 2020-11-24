@@ -95,7 +95,7 @@ bool SFML_engine::poll_event (Event &event)
 	return false;
 }
 
-bool SFML_engine::working ()
+bool SFML_engine::running ()
 {
 	return window.isOpen ();
 }
@@ -135,6 +135,15 @@ void SFML_engine::Texture::draw_sprite (const Vector2f &pos)
 {
 	sf::Sprite sprite (texture);
 	sprite.setPosition (pos.x, pos.y);
+	window.draw (sprite);
+}
+
+
+void SFML_engine::Texture::draw_sprite (const Vector2f &pos, const Vector2f &size)
+{
+	sf::Sprite sprite (texture);
+	sprite.setPosition (pos.x, pos.y);
+	sprite.setScale (size.x / texture.getSize ().x, size.y / texture.getSize ().y);
 	window.draw (sprite);
 }
 

@@ -1,70 +1,93 @@
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#ifndef _BUTTON_HPP_
+#define _BUTTON_HPP_
 
+template <typename T>
+struct Button_scheme;
+class Abstract_button;
+class Rectangle_button;
 class Texture_button;
 
 
 #include "window.hpp"
 
-/*
-class Button : public Window
+//=============================================================================
+template <typename T>
+struct Button_scheme
 {
-private:
-	Vector2<int> pos;
-
-public:
-	virtual void draw () = 0;
-
-	virtual bool handle_event (const Event &event);
-
-	bool on_mouse_click ();
-	bool on_mouse_release ();
-	bool on_mouse_inside ();
-
-
+	T released;
+	T hovered;
+	T pressed;
 };
-*/
+
+typedef Button_scheme<Color> Color_scheme;
+typedef Button_scheme<const char *> Image_scheme;
+typedef Button_scheme<Engine::Texture> Texture_scheme;
+//=============================================================================
 
 
-class Texture_button : public Window
+
+//=============================================================================
+class Abstract_button : public Window
+{
+public:
+	Abstract_button (const Vector2f &pos);
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Rectangle_button : public Abstract_button
 {
 private:
-	Engine::Texture *curr_texture;
-	Engine::Texture released_texture;
-	Engine::Texture pressed_texture;
+	Vector2f size;
+	Color *curr_color;
+	Color_scheme color;
 
 public:
-	Texture_button (const char *released_img, const char *pressed_img, Vector2f _pos = Vector2f ());
+	Rectangle_button (const Color_scheme &clr_shm, const Vector2f &pos, const Vector2f &sz);
 
-	virtual void draw ();
-
-	virtual bool handle_event (const Event &event);
+	virtual void on_redraw ();
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	virtual bool on_mouse_move    (const Event::Mouse_move &move);
 
 	bool contains (int x, int y);
 
 	bool pressed ();
+	bool hovered ();
 
-	Vector2<uint32_t> get_size ();
+	void set_size (const Vector2f &sz);
+	const Vector2f get_size ();
 };
+//=============================================================================
 
 
 
-/*
-	Button (const sf::RectangleShape &_rectangle, const sf::Text &_text);
+//=============================================================================
+class Texture_button : public Abstract_button
+{
+private:
+	Vector2f size;
+	Engine::Texture *curr_texture;
+	Texture_scheme texture;
 
-	void set_position (const sf::Vector2f &pos);
+public:
+	Texture_button (const Image_scheme &img_shm, const Vector2f &pos = Vector2f ());
 
-	void set_fill_color (const sf::Color &color);
+	virtual void on_redraw ();
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	virtual bool on_mouse_move    (const Event::Mouse_move &move);
 
-	const sf::Color &get_fill_color () const;
+	bool contains (int x, int y);
 
-	void set_text_color (const sf::Color &color);
+	bool pressed ();
+	bool hovered ();
 
-	bool contains (int x, int y) const;
+	void set_size (const Vector2f &sz);
+	const Vector2f get_size ();
+};
+//=============================================================================
 
-	bool contains (sf::Vector2f &coord) const;
-
-	virtual void draw (sf::RenderWindow &window) const;
-	
-	virtual void action ();*/
-#endif
+#endif // _BUTTON_HPP_

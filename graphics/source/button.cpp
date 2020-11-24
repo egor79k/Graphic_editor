@@ -1,126 +1,225 @@
 #include "../include/button.hpp"
 
-/*
-Button::Button (Vectro2<int> _pos) :
-	pos (_pos)
-{}
 
+//=============================================================================
+// ::::  Abstract_button  ::::
+//=============================================================================
 
-bool Button::handle_event (const Event &event)
+Abstract_button::Abstract_button (const Vector2f &pos) :
+	Window (pos)
 {
-	return false;
-}*/
-
-
-
-
-Texture_button::Texture_button (const char *released_img, const char *pressed_img, Vector2f _pos) :
-	Window (_pos),
-	released_texture (released_img),
-	pressed_texture (pressed_img)
-{
-	curr_texture = &released_texture;
+	Event_system::attach_mouse_press (this);
+	Event_system::attach_mouse_release (this);
+	Event_system::attach_mouse_move (this);
 }
+//=============================================================================
 
 
-void Texture_button::draw ()
+
+//=============================================================================
+// ::::  Rectangle_button  ::::
+//=============================================================================
+
+Rectangle_button::Rectangle_button (const Color_scheme &clr_shm, const Vector2f &pos, const Vector2f &sz) :
+	Abstract_button (pos),
+	size (sz),
+	color (clr_shm)
 {
-	curr_texture->draw_sprite (pos);
+	curr_color = &color.released;
 }
+//_____________________________________________________________________________
 
-
-bool Texture_button::handle_event (const Event &event)
+void Rectangle_button::on_redraw ()
 {
-	if (event.type == Event::Mouse_pressed && contains (event.mouse_click.x, event.mouse_click.y))
+	Engine::draw::rectangle (pos, size, *curr_color);
+}
+//_____________________________________________________________________________
+
+bool Rectangle_button::on_mouse_press (const Event::Mouse_click &click)
+{
+	if (contains (click.x, click.y))
 	{
-		curr_texture = &pressed_texture;
+		curr_color = &color.pressed;
 		return true;
 	}
 
-	if (event.type == Event::Mouse_released)
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Rectangle_button::on_mouse_release (const Event::Mouse_click &click)
+{
+	if (pressed ())
 	{
-		curr_texture = &released_texture;
+		if (contains (click.x, click.y))
+		{
+			curr_color = &color.hovered;
+			// do action ()
+		}
+		else
+		{
+			curr_color = &color.released;
+			// no action ()
+		}
 		return true;
-	}	
+	}
 
 	return false;
 }
+//_____________________________________________________________________________
 
+bool Rectangle_button::on_mouse_move (const Event::Mouse_move &move)
+{
+	if (!pressed ())
+	{
+		if (contains (move.x, move.y))
+		{
+			curr_color = &color.hovered;
+			return true;
+		}
+
+		if (hovered ())
+		{
+			curr_color = &color.released;
+			return true;
+		}
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Rectangle_button::contains (int x, int y)
+{
+	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
+}
+//_____________________________________________________________________________
+
+bool Rectangle_button::pressed ()
+{
+	return curr_color == &color.pressed;
+}
+//_____________________________________________________________________________
+
+bool Rectangle_button::hovered ()
+{
+	return curr_color == &color.hovered;
+}
+//_____________________________________________________________________________
+
+void Rectangle_button::set_size (const Vector2f &sz)
+{
+	size = sz;
+}
+//_____________________________________________________________________________
+
+const Vector2f Rectangle_button::get_size ()
+{
+	return size;
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Texture_button  ::::
+//=============================================================================
+
+Texture_button::Texture_button (const Image_scheme &img_shm, const Vector2f &pos) :
+	Abstract_button (pos),
+	texture ({Engine::Texture (img_shm.released), Engine::Texture (img_shm.hovered), Engine::Texture (img_shm.pressed)})
+{
+	curr_texture = &texture.released;
+	size = curr_texture->get_size ();
+}
+//_____________________________________________________________________________
+
+void Texture_button::on_redraw ()
+{
+	curr_texture->draw_sprite (pos, size);
+}
+//_____________________________________________________________________________
+
+bool Texture_button::on_mouse_press (const Event::Mouse_click &click)
+{
+	if (contains (click.x, click.y))
+	{
+		curr_texture = &texture.pressed;
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Texture_button::on_mouse_release (const Event::Mouse_click &click)
+{
+	if (pressed ())
+	{
+		if (contains (click.x, click.y))
+		{
+			curr_texture = &texture.hovered;
+			// do action ()
+		}
+		else
+		{
+			curr_texture = &texture.released;
+			// no action ()
+		}
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Texture_button::on_mouse_move (const Event::Mouse_move &move)
+{
+	if (!pressed ())
+	{
+		if (contains (move.x, move.y))
+		{
+			curr_texture = &texture.hovered;
+			return true;
+		}
+
+		if (hovered ())
+		{
+			curr_texture = &texture.released;
+			return true;
+		}
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
 
 bool Texture_button::contains (int x, int y)
 {
-	Vector2<uint32_t> size = curr_texture->get_size ();
-	Vector2<int> pos = get_position ();
 	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
 }
-
+//_____________________________________________________________________________
 
 bool Texture_button::pressed ()
 {
-	return &pressed_texture == curr_texture;
+	return curr_texture == &texture.pressed;
 }
+//_____________________________________________________________________________
 
-
-Vector2<uint32_t> Texture_button::get_size ()
+bool Texture_button::hovered ()
 {
-	return curr_texture->get_size ();
+	return curr_texture == &texture.hovered;
 }
+//_____________________________________________________________________________
 
-
-
-
-/*
-Button::Button (const sf::RectangleShape &_rectangle, const sf::Text &_text) :
-	rectangle (_rectangle),
-	text (_text)
-{}
-
-
-void Button::set_position (const sf::Vector2f &pos)
+void Texture_button::set_size (const Vector2f &sz)
 {
-	rectangle.setPosition (pos);
-	text.setPosition (pos.x + (rectangle.getSize ().x - text.getString ().getSize () * text.getCharacterSize () / 2) / 2, pos.y + 1);
+	size = sz;
 }
+//_____________________________________________________________________________
 
-
-void Button::set_fill_color (const sf::Color &color)
+const Vector2f Texture_button::get_size ()
 {
-	rectangle.setFillColor (color);
+	return size;
 }
-
-
-const sf::Color &Button::get_fill_color () const
-{
-	return rectangle.getFillColor ();
-}
-
-
-void Button::set_text_color (const sf::Color &color)
-{
-	text.setFillColor (color);
-}
-
-
-bool Button::contains (int x, int y) const
-{
-	return rectangle.getGlobalBounds ().contains (x, y);
-}
-
-
-bool Button::contains (sf::Vector2f &coord) const
-{
-	return rectangle.getGlobalBounds ().contains (coord);
-}
-
-
-void Button::draw (sf::RenderWindow &window) const
-{
-	window.draw (rectangle);
-	window.draw (text);
-}
-
-
-void Button::action ()
-{
-	printf ("Abstract Action\n");
-}*/
+//=============================================================================

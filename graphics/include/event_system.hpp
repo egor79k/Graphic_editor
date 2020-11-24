@@ -6,7 +6,7 @@ class Event_system;
 #include <vector>
 #include "window.hpp"
 
-
+//=============================================================================
 class Event_system
 {
 private:
@@ -16,6 +16,7 @@ private:
 	static std::vector<Abstract_window *> attached_on_mouse_move;
 
 public:
+	static void dispatch_redraw ();
 	static void dispatch_event ();
 
 	static void attach_redraw (Abstract_window *window);
@@ -23,6 +24,6 @@ public:
 	static void attach_mouse_release (Abstract_window *window);
 	static void attach_mouse_move (Abstract_window *window);
 };
-
+//=============================================================================
 
 #endif // _EVENT_SYSTEM_HPP_

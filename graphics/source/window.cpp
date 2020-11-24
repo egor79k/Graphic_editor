@@ -223,7 +223,7 @@ void Texture_window::draw (const Vector2<Vector2f> &area)
 }
 //_____________________________________________________________________________
 
-Vector2f Texture_window::get_size ()
+const Vector2f Texture_window::get_size ()
 {
 	return texture.get_size ();
 }

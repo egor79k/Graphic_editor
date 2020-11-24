@@ -38,7 +38,7 @@ public:
 
 	static bool poll_event (Event &event);
 
-	static bool working ();
+	static bool running ();
 
 	static void exit ();
 
@@ -61,6 +61,7 @@ public:
 		Texture (const char *texture_file);
 
 		void draw_sprite (const Vector2f &pos);
+		void draw_sprite (const Vector2f &pos, const Vector2f &size);
 		void draw_sprite (const Vector2f &pos, const Vector2<Vector2f> &area);
 		Vector2f get_size ();
 	};

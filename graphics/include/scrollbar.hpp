@@ -64,11 +64,11 @@ private:
 	Texture_button slider;
 
 public:
-	Scrollbar (Scrollable_window *swin, Vector2f pos, uint32_t _height, const Scrollbar_init &init = Default_scrollbar::Texture, const Color &background = Color::White);
+	Scrollbar (Scrollable_window *swin, const Vector2f &pos, uint32_t _height, const Scrollbar_init &init = Default_scrollbar::Texture, const Color &background = Color::White);
 
-	virtual void draw ();
+	virtual void on_redraw ();
 
-	virtual bool handle_event (const Event &event);
+	//virtual bool handle_event (const Event &event);
 };
 
 
@@ -87,9 +87,9 @@ private:
 public:
 	Big_image (const char *file, const Vector2f &_pos = Vector2f (), const Vector2f &_size = Vector2f (Engine::get_size ().x, Engine::get_size ().y));
 
-	virtual void draw ();
+	virtual void on_redraw ();
 
-	virtual bool handle_event (const Event &event);
+	//virtual bool handle_event (const Event &event);
 
 	double scroll_str   (int delta);
 	double scroll_page  (int delta);

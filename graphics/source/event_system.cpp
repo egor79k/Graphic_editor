@@ -11,11 +11,15 @@ std::vector<Abstract_window *> Event_system::attached_on_mouse_release;
 std::vector<Abstract_window *> Event_system::attached_on_mouse_move;
 //-----------------------------------------------------------------------------
 
-void Event_system::dispatch_event ()
+void Event_system::dispatch_redraw ()
 {
 	for (auto window: attached_on_redraw)
 		window->handle_redraw ();
+}
+//-----------------------------------------------------------------------------
 
+void Event_system::dispatch_event ()
+{
 	Event event;
 	while (Engine::poll_event (event))
 	{

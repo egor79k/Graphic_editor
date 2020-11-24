@@ -19,13 +19,34 @@ int main (int argc, char *argv[])
 
 	Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
 	Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
+	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {300, 300});
+	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {300, 100}, {50, 50});
 	//app.add_window (&rect);
 	
 
 	//Big_image bimg (argv[1], {100, 100}, {900, 500});
 	//Application::add_window (&bimg);
 
-	Application::run ();
+	Vector2f size (128, 128);
+	bool growup = false;
+
+	while (Engine::running ())
+	{
+		if (size.x == 128)
+			growup = false;
+		else if (size.x == 70)
+			growup = true;
+
+		if (growup)
+			size += {1, 1};
+		else
+			size -= {1, 1};
+
+		tbut.set_size (size);
+		Application::step ();
+	}
+
+	//Application::run ();
 
 	return 0;
 }
