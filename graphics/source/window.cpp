@@ -50,31 +50,31 @@ bool Abstract_window::handle_mouse_move (const Event::Mouse_move &move)
 // ::::  Window  ::::
 //=============================================================================
 
-Window::Window (Vector2f _pos) :
+Window::Window (Vector2p _pos) :
 	pos (_pos)
 {
 	Event_system::attach_redraw (this);
 }
 //_____________________________________________________________________________
 
-Window::Window (float x, float y) :
+Window::Window (int16_t x, int16_t y) :
 	pos (x, y)
 {}
 //_____________________________________________________________________________
 
-const Vector2f &Window::get_position () const
+const Vector2p &Window::get_position () const
 {
 	return pos;
 }
 //_____________________________________________________________________________
 
-void Window::set_position (const Vector2f &_pos)
+void Window::set_position (const Vector2p _pos)
 {
 	pos = _pos;
 }
 //_____________________________________________________________________________
 
-void Window::set_position (const float x, const float y)
+void Window::set_position (const int16_t x, const int16_t y)
 {
 	pos = {x, y};
 }
@@ -109,7 +109,7 @@ bool Window::on_mouse_move    (const Event::Mouse_move &move)
 // ::::  Rectangle_window  ::::
 //=============================================================================
 
-Rectangle_window::Rectangle_window (const Vector2f &_pos, const Vector2f &_size, const Color &_color) :
+Rectangle_window::Rectangle_window (const Vector2p _pos, const Vector2s _size, const Color &_color) :
 		Window (_pos),
 		size (_size),
 		color (_color)
@@ -122,7 +122,7 @@ void Rectangle_window::on_redraw ()
 }
 //_____________________________________________________________________________
 
-const Vector2f &Rectangle_window::get_size ()
+const Vector2s &Rectangle_window::get_size ()
 {
 	return size;
 }
@@ -134,7 +134,7 @@ const Color &Rectangle_window::get_color ()
 }
 //_____________________________________________________________________________
 
-void Rectangle_window::set_size (const Vector2f &sz)
+void Rectangle_window::set_size (const Vector2s sz)
 {
 	size = sz;
 }
@@ -149,58 +149,12 @@ void Rectangle_window::set_color (const Color &col)
 //=============================================================================
 
 
-/*
-//=============================================================================
-// ::::  Window  ::::
-//=============================================================================
-
-Window::Window () :
-	pos (Vector2<int> ())
-{}
-//_____________________________________________________________________________
-
-Window::Window (Vector2<int> _pos) :
-	pos (_pos)
-{}
-//_____________________________________________________________________________
-
-Window::Window (int x, int y) :
-	pos (Vector2<int> (x, y))
-{}
-//_____________________________________________________________________________
-
-bool Window::handle_event (const Event &event)
-{
-	//printf("Event %d handled in Window\n", event.type);
-	return false;
-}
-//_____________________________________________________________________________
-
-const Vector2<int> Window::get_position () const
-{
-	return pos;
-}
-//_____________________________________________________________________________
-
-void Window::set_position (const Vector2<int> _pos)
-{
-	pos = _pos;
-}
-//_____________________________________________________________________________
-
-void Window::set_position (const int x, const int y)
-{
-	pos = Vector2<int> (x, y);
-}
-//=============================================================================
-*/
-
 
 //=============================================================================
 // ::::  Texture_window  ::::
 //=============================================================================
 
-Texture_window::Texture_window (const char *texture_file, const Vector2f &_pos) :
+Texture_window::Texture_window (const char *texture_file, const Vector2p _pos) :
 	Window (_pos),
 	texture (texture_file)
 {}
@@ -217,14 +171,34 @@ void Texture_window::on_redraw ()
 }
 //_____________________________________________________________________________
 
-void Texture_window::draw (const Vector2<Vector2f> &area)
+void Texture_window::draw (const Vector2<Vector2s> &area)
 {
 	texture.draw_sprite (get_position (), area);
 }
 //_____________________________________________________________________________
 
-const Vector2f Texture_window::get_size ()
+const Vector2s Texture_window::get_size ()
 {
 	return texture.get_size ();
 }
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Canvas  ::::
+//=============================================================================
+
+Canvas::Canvas (const Vector2p pos, const Vector2s size, const Color &color) :
+	Rectangle_window (pos, size, color),
+	image (size, color)
+{
+
+}
+//_____________________________________________________________________________
+void Canvas::on_redraw ()
+{
+	Engine::draw::image (pos, image);
+}
+
 //=============================================================================

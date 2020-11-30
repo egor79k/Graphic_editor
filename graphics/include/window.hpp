@@ -24,6 +24,8 @@
 class Abstract_window;
 class Window;
 class Rectangle_window;
+class Texture_window;
+class Canvas;
 
 
 #include <vector>
@@ -32,6 +34,7 @@ class Rectangle_window;
 #include "event.hpp"
 #include "event_system.hpp"
 #include "color.hpp"
+#include "pixel_array.hpp"
 
 
 
@@ -63,16 +66,16 @@ public:
 class Window : public Abstract_window
 {
 protected:
-	Vector2f pos;
+	Vector2p pos;
 
 public:
 	Window () = default;
-	Window (Vector2f _pos);
-	Window (float x, float y);
+	Window (Vector2p _pos);
+	Window (int16_t x, int16_t y);
 
-	const Vector2f &get_position () const;
-	void set_position (const Vector2f &_pos);
-	void set_position (const float x, const float y);
+	const Vector2p &get_position () const;
+	void set_position (const Vector2p _pos);
+	void set_position (const int16_t x, const int16_t y);
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
@@ -87,48 +90,22 @@ public:
 class Rectangle_window : public Window
 {
 protected:
-	Vector2f size;
+	Vector2s size;
 	Color color;
 
 public:
 	Rectangle_window () = default;
-	Rectangle_window (const Vector2f &_pos, const Vector2f &_size, const Color &_color = Color::White);
+	Rectangle_window (const Vector2p _pos, const Vector2s _size, const Color &_color = Color::White);
 
-	const Vector2f &get_size ();
+	const Vector2s &get_size ();
 	const Color &get_color ();
-	void set_size (const Vector2f &sz);
+	void set_size (const Vector2s sz);
 	void set_color (const Color &col);
 
 	virtual void on_redraw ();
 };
 //=============================================================================
 
-
-/*
-//=============================================================================
-class Window
-{
-protected:
-	Vector2<int> pos;
-
-
-public:
-	Window ();
-	Window (Vector2<int> _pos);
-	Window (int x, int y);
-
-	virtual void draw () = 0;
-
-	virtual bool handle_event (const Event &event);
-
-	const Vector2<int> get_position () const;
-
-	void set_position (const Vector2<int> _pos);
-
-	void set_position (const int x, const int y);
-};
-//=============================================================================
-*/
 
 
 //=============================================================================
@@ -138,15 +115,30 @@ protected:
 	Engine::Texture texture;
 
 public:
-	Texture_window (const char *texture_file, const Vector2f &_pos);
+	Texture_window (const char *texture_file, const Vector2p _pos);
 
 	//Texture_window (char *_texture, Vector2<int> _pos, Vector2<i>, Vector2<int> _size = Vector2<int> (), const Color &_col = Color::White);
 
 	virtual void on_redraw ();
 
-	void draw (const Vector2<Vector2f> &area);
+	void draw (const Vector2<Vector2s> &area);
 
-	const Vector2f get_size ();
+	const Vector2s get_size ();
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Canvas : public Rectangle_window
+{
+protected:
+	Pixel_array image;
+
+public:
+	Canvas (const Vector2p pos, const Vector2s size, const Color &color = Color::White);
+
+	virtual void on_redraw ();
 };
 //=============================================================================
 

@@ -30,7 +30,7 @@ typedef Button_scheme<Engine::Texture> Texture_scheme;
 class Abstract_button : public Window
 {
 public:
-	Abstract_button (const Vector2f &pos);
+	Abstract_button (const Vector2p pos);
 };
 //=============================================================================
 
@@ -40,12 +40,12 @@ public:
 class Rectangle_button : public Abstract_button
 {
 private:
-	Vector2f size;
+	Vector2s size;
 	Color *curr_color;
 	Color_scheme color;
 
 public:
-	Rectangle_button (const Color_scheme &clr_shm, const Vector2f &pos, const Vector2f &sz);
+	Rectangle_button (const Color_scheme &clr_shm, const Vector2p pos, const Vector2s sz);
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
@@ -57,8 +57,8 @@ public:
 	bool pressed ();
 	bool hovered ();
 
-	void set_size (const Vector2f &sz);
-	const Vector2f get_size ();
+	void set_size (const Vector2s sz);
+	const Vector2s get_size ();
 };
 //=============================================================================
 
@@ -68,12 +68,12 @@ public:
 class Texture_button : public Abstract_button
 {
 private:
-	Vector2f size;
+	Vector2s size;
 	Engine::Texture *curr_texture;
 	Texture_scheme texture;
 
 public:
-	Texture_button (const Image_scheme &img_shm, const Vector2f &pos = Vector2f ());
+	Texture_button (const Image_scheme &img_shm, const Vector2p pos = Vector2p ());
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
@@ -85,8 +85,8 @@ public:
 	bool pressed ();
 	bool hovered ();
 
-	void set_size (const Vector2f &sz);
-	const Vector2f get_size ();
+	void set_size (const Vector2s sz);
+	const Vector2s get_size ();
 };
 //=============================================================================
 

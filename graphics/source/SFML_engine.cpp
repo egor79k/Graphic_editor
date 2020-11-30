@@ -117,10 +117,10 @@ void SFML_engine::fill (const Color &col)
 }
 
 
-Vector2<uint32_t> SFML_engine::get_size ()
+Vector2s SFML_engine::get_size ()
 {
 	sf::Vector2u size = window.getSize ();
-	return Vector2<uint32_t> (size.x, size.y);
+	return Vector2s (size.x, size.y);
 }
 
 
@@ -131,7 +131,7 @@ SFML_engine::Texture::Texture (const char *texture_file)
 }
 
 
-void SFML_engine::Texture::draw_sprite (const Vector2f &pos)
+void SFML_engine::Texture::draw_sprite (const Vector2p pos)
 {
 	sf::Sprite sprite (texture);
 	sprite.setPosition (pos.x, pos.y);
@@ -139,16 +139,16 @@ void SFML_engine::Texture::draw_sprite (const Vector2f &pos)
 }
 
 
-void SFML_engine::Texture::draw_sprite (const Vector2f &pos, const Vector2f &size)
+void SFML_engine::Texture::draw_sprite (const Vector2p pos, const Vector2s size)
 {
 	sf::Sprite sprite (texture);
 	sprite.setPosition (pos.x, pos.y);
-	sprite.setScale (size.x / texture.getSize ().x, size.y / texture.getSize ().y);
+	sprite.setScale ((float) size.x / texture.getSize ().x, (float) size.y / texture.getSize ().y);
 	window.draw (sprite);
 }
 
 
-void SFML_engine::Texture::draw_sprite (const Vector2f &pos, const Vector2<Vector2f> &area)
+void SFML_engine::Texture::draw_sprite (const Vector2p pos, const Vector2<Vector2s> &area)
 {
 	sf::Sprite sprite (texture, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
 	sprite.setPosition (pos.x, pos.y);
@@ -156,19 +156,30 @@ void SFML_engine::Texture::draw_sprite (const Vector2f &pos, const Vector2<Vecto
 }
 
 
-Vector2f SFML_engine::Texture::get_size ()
+Vector2s SFML_engine::Texture::get_size ()
 {
 	sf::Vector2u size = texture.getSize ();
-	return Vector2f (size.x, size.y);
+	return Vector2s (size.x, size.y);
 }
 
 
 
-void SFML_engine::draw::rectangle (const Vector2f &pos, const Vector2f &size, const Color &col)
+void SFML_engine::draw::rectangle (const Vector2p pos, const Vector2s size, const Color &col)
 {
 	sf::RectangleShape rect (sf::Vector2f (size.x, size.y));
 	rect.setPosition (pos.x, pos.y);
 	rect.setFillColor (sf::Color (col.r, col.g, col.b, col.a));
 
 	window.draw (rect);
+}
+
+
+void SFML_engine::draw::image (const Vector2p pos, const Pixel_array &image)
+{
+	sf::Texture texture;
+	texture.create (image.get_size ().x, image.get_size ().y);
+	texture.update (image.get_origin ());
+	sf::Sprite sprite (texture);
+	sprite.setPosition (pos.x, pos.y);
+	window.draw (sprite);
 }

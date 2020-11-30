@@ -5,7 +5,7 @@
 // ::::  Abstract_button  ::::
 //=============================================================================
 
-Abstract_button::Abstract_button (const Vector2f &pos) :
+Abstract_button::Abstract_button (const Vector2p pos) :
 	Window (pos)
 {
 	Event_system::attach_mouse_press (this);
@@ -20,7 +20,7 @@ Abstract_button::Abstract_button (const Vector2f &pos) :
 // ::::  Rectangle_button  ::::
 //=============================================================================
 
-Rectangle_button::Rectangle_button (const Color_scheme &clr_shm, const Vector2f &pos, const Vector2f &sz) :
+Rectangle_button::Rectangle_button (const Color_scheme &clr_shm, const Vector2p pos, const Vector2s sz) :
 	Abstract_button (pos),
 	size (sz),
 	color (clr_shm)
@@ -107,13 +107,13 @@ bool Rectangle_button::hovered ()
 }
 //_____________________________________________________________________________
 
-void Rectangle_button::set_size (const Vector2f &sz)
+void Rectangle_button::set_size (const Vector2s sz)
 {
 	size = sz;
 }
 //_____________________________________________________________________________
 
-const Vector2f Rectangle_button::get_size ()
+const Vector2s Rectangle_button::get_size ()
 {
 	return size;
 }
@@ -125,7 +125,7 @@ const Vector2f Rectangle_button::get_size ()
 // ::::  Texture_button  ::::
 //=============================================================================
 
-Texture_button::Texture_button (const Image_scheme &img_shm, const Vector2f &pos) :
+Texture_button::Texture_button (const Image_scheme &img_shm, const Vector2p pos) :
 	Abstract_button (pos),
 	texture ({Engine::Texture (img_shm.released), Engine::Texture (img_shm.hovered), Engine::Texture (img_shm.pressed)})
 {
@@ -212,13 +212,13 @@ bool Texture_button::hovered ()
 }
 //_____________________________________________________________________________
 
-void Texture_button::set_size (const Vector2f &sz)
+void Texture_button::set_size (const Vector2s sz)
 {
 	size = sz;
 }
 //_____________________________________________________________________________
 
-const Vector2f Texture_button::get_size ()
+const Vector2s Texture_button::get_size ()
 {
 	return size;
 }

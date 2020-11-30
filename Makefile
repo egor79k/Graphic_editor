@@ -2,7 +2,7 @@ CXX = g++
 LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
 OBJDIR = object
 
-link: main.cpp $(OBJDIR)/application.o $(OBJDIR)/button.o $(OBJDIR)/color.o $(OBJDIR)/scrollbar.o $(OBJDIR)/SFML_engine.o $(OBJDIR)/window.o $(OBJDIR)/event_system.o
+link: main.cpp $(OBJDIR)/application.o $(OBJDIR)/button.o $(OBJDIR)/color.o $(OBJDIR)/scrollbar.o $(OBJDIR)/SFML_engine.o $(OBJDIR)/window.o $(OBJDIR)/event_system.o $(OBJDIR)/pixel_array.o
 	$(CXX) $^ $(LDLIBS) -o main
 
 
@@ -26,3 +26,6 @@ $(OBJDIR)/window.o: graphics/source/window.cpp graphics/include/window.hpp
 
 $(OBJDIR)/event_system.o: graphics/source/event_system.cpp graphics/include/event_system.hpp
 	$(CXX) -c graphics/source/event_system.cpp -o $(OBJDIR)/event_system.o
+
+$(OBJDIR)/pixel_array.o: graphics/source/pixel_array.cpp graphics/include/pixel_array.hpp
+	$(CXX) -c graphics/source/pixel_array.cpp -o $(OBJDIR)/pixel_array.o

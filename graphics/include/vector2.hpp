@@ -1,6 +1,8 @@
 #ifndef _VECTOR2_HPP_
 #define _VECTOR2_HPP_
 
+#include <cstdint>
+
 
 template<typename T>
 class Vector2
@@ -125,6 +127,7 @@ bool operator!= (const Vector2<T>& l, const Vector2<T>& r)
 typedef Vector2<int>          Vector2i;
 typedef Vector2<unsigned int> Vector2u;
 typedef Vector2<float>        Vector2f;
-
+typedef Vector2<uint16_t>     Vector2s; // size type
+typedef Vector2<int16_t>      Vector2p; // position type
 
 #endif

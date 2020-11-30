@@ -21,13 +21,14 @@ int main (int argc, char *argv[])
 	Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
 	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {300, 300});
 	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {300, 100}, {50, 50});
+	Canvas cnv ({600, 300}, {100, 100});
 	//app.add_window (&rect);
 	
 
 	//Big_image bimg (argv[1], {100, 100}, {900, 500});
 	//Application::add_window (&bimg);
 
-	Vector2f size (128, 128);
+	Vector2s size (128, 128);
 	bool growup = false;
 
 	while (Engine::running ())

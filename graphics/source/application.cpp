@@ -19,7 +19,7 @@ void Application::step ()
 	Event_system::dispatch_event ();
 
 	Engine::fill (Color::Black);
-
+	
 	Event_system::dispatch_redraw ();
 
 	Engine::flush_screen ();

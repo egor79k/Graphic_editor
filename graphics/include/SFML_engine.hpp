@@ -5,6 +5,7 @@
 #include "event.hpp"
 #include "vector2.hpp"
 #include "color.hpp"
+#include "pixel_array.hpp"
 
 
 class SFML_engine
@@ -48,7 +49,7 @@ public:
 	static void fill (const Color &col);
 
 
-	static Vector2<uint32_t> get_size ();
+	static Vector2s get_size ();
 
 
 
@@ -60,16 +61,17 @@ public:
 	public:
 		Texture (const char *texture_file);
 
-		void draw_sprite (const Vector2f &pos);
-		void draw_sprite (const Vector2f &pos, const Vector2f &size);
-		void draw_sprite (const Vector2f &pos, const Vector2<Vector2f> &area);
-		Vector2f get_size ();
+		void draw_sprite (const Vector2p pos);
+		void draw_sprite (const Vector2p pos, const Vector2s size);
+		void draw_sprite (const Vector2p pos, const Vector2<Vector2s> &area);
+		Vector2s get_size ();
 	};
 
 
 	struct draw
 	{
-		static void rectangle (const Vector2f &pos, const Vector2f &size, const Color &col);
+		static void rectangle (const Vector2p pos, const Vector2s size, const Color &col);
+		static void image (const Vector2p pos, const Pixel_array &image);
 	};
 };
 
