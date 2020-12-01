@@ -6,6 +6,7 @@
 #include "include/color.hpp"
 #include "include/event.hpp"
 #include "include/event_system.hpp"
+#include "include/pixel_array.hpp"
 #include "include/scrollbar.hpp"
 #include "include/vector2.hpp"
 #include "include/window.hpp"

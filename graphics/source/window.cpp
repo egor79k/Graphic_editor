@@ -146,6 +146,16 @@ void Rectangle_window::set_color (const Color &col)
 }
 //_____________________________________________________________________________
 
+bool Rectangle_window::contains (const Vector2p point)
+{
+	return (pos.x < point.x && point.x < (pos.x + size.x) && pos.y < point.y && point.y < (pos.y + size.y));
+}
+//_____________________________________________________________________________
+
+bool Rectangle_window::contains (int x, int y)
+{
+	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
+}
 //=============================================================================
 
 

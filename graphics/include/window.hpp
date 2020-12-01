@@ -101,6 +101,8 @@ public:
 	const Color &get_color ();
 	void set_size (const Vector2s sz);
 	void set_color (const Color &col);
+	bool contains (const Vector2p point);
+	bool contains (int x, int y);
 
 	virtual void on_redraw ();
 };
@@ -139,6 +141,8 @@ public:
 	Canvas (const Vector2p pos, const Vector2s size, const Color &color = Color::White);
 
 	virtual void on_redraw ();
+
+	friend class Tool_manager;
 };
 //=============================================================================
 

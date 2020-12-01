@@ -7,6 +7,7 @@ class Application;
 #include "../EngineSet.hpp"
 #include "event_system.hpp"
 #include "window.hpp"
+#include "gred_tools.hpp"
 
 
 //=============================================================================

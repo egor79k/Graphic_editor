@@ -17,11 +17,12 @@ int main (int argc, char *argv[])
 
 	Application::initialize (Win_w, Win_h, "Native text");
 
-	Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
-	Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
-	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {300, 300});
-	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {300, 100}, {50, 50});
-	Canvas cnv ({600, 300}, {100, 100});
+	//Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
+	//Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
+	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {10, 10});
+	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {10, 300}, {50, 50});
+	//Canvas cnv ({600, 300}, {100, 100});
+	Tool_manager tmg;
 	//app.add_window (&rect);
 	
 

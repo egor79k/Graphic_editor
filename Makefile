@@ -2,7 +2,7 @@ CXX = g++
 LDLIBS = -lsfml-graphics -lsfml-window -lsfml-system
 OBJDIR = object
 
-link: main.cpp $(OBJDIR)/application.o $(OBJDIR)/button.o $(OBJDIR)/color.o $(OBJDIR)/scrollbar.o $(OBJDIR)/SFML_engine.o $(OBJDIR)/window.o $(OBJDIR)/event_system.o $(OBJDIR)/pixel_array.o
+link: main.cpp $(OBJDIR)/application.o $(OBJDIR)/button.o $(OBJDIR)/color.o $(OBJDIR)/scrollbar.o $(OBJDIR)/SFML_engine.o $(OBJDIR)/window.o $(OBJDIR)/event_system.o $(OBJDIR)/pixel_array.o $(OBJDIR)/gred_tools.o
 	$(CXX) $^ $(LDLIBS) -o main
 
 
@@ -29,3 +29,6 @@ $(OBJDIR)/event_system.o: graphics/source/event_system.cpp graphics/include/even
 
 $(OBJDIR)/pixel_array.o: graphics/source/pixel_array.cpp graphics/include/pixel_array.hpp
 	$(CXX) -c graphics/source/pixel_array.cpp -o $(OBJDIR)/pixel_array.o
+
+$(OBJDIR)/gred_tools.o: graphics/source/gred_tools.cpp graphics/include/gred_tools.hpp
+	$(CXX) -c graphics/source/gred_tools.cpp -o $(OBJDIR)/gred_tools.o
