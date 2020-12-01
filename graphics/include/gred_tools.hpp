@@ -12,7 +12,7 @@ class Abstract_tool
 {
 public:
 	//virtual void start_apply (Pixel_array &image, const Vector2p pos) = 0;
-	virtual void apply (Pixel_array &image, const Vector2p pos_0, const Vector2p pos_1) = 0;
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1) = 0;
 	//virtual void stop_apply (Pixel_array &image, const Vector2p pos) = 0;
 
 };
@@ -25,7 +25,7 @@ class Pencil : public Abstract_tool
 {
 public:
 	//virtual void start_apply (Pixel_array &image, const Vector2p pos);
-	virtual void apply (Pixel_array &image, const Vector2p pos_0, const Vector2p pos_1);
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1);
 	//virtual void stop_apply (Pixel_array &image, const Vector2p pos);
 };
 //=============================================================================

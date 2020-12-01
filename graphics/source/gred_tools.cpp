@@ -11,49 +11,43 @@ void start_apply (Pixel_array &image, const Vector2p pos)
 }*/
 
 
-void Pencil::apply (Pixel_array &image, const Vector2p pos_0, const Vector2p pos_1)
+void Pencil::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1)
 {
 	int16_t x0 = pos_0.x;
 	int16_t y0 = pos_0.y;
 	int16_t x1 = pos_1.x;
 	int16_t y1 = pos_1.y;
-	int16_t dx = x1 - x0;
-	int16_t dy = y1 - y0;
+	int16_t dx = abs (x1 - x0);
+	int16_t dy = abs (y1 - y0);
+	int16_t Vector2p::*axis_0 = &Vector2p::x;
+	int16_t Vector2p::*axis_1 = &Vector2p::y;
 
-	if (abs (dy) < abs (dx))
-	{
-		float k = static_cast<float> (dy) / static_cast<float> (dx);
+	if (dy > dx)
+		std::swap (axis_0, axis_1);
 
-		if (x0 > x1)
+		float k = static_cast<float> (pos_1.*axis_1 - pos_0.*axis_1) / static_cast<float> (pos_1.*axis_0 - pos_0.*axis_0);
+
+		if (pos_0.*axis_0 > pos_1.*axis_0)
 		{
-			std::swap (x0, x1);
-			std::swap (y0, y1);
+			std::swap (pos_0.*axis_0, pos_1.*axis_0);
+			std::swap (pos_0.*axis_1, pos_1.*axis_1);
 		}
 
-		for (int16_t x = x0; x < x1; ++x)
+		for (int16_t x = pos_0.*axis_0; x < pos_1.*axis_0; ++x)
 		{
-			image.set_pixel (x, k * (x - x0) + y0, Color::Blue);
-			image.set_pixel (x, k * (x - x0) + y0 + 1, Color::Blue);
-			image.set_pixel (x, k * (x - x0) + y0 - 1, Color::Blue);
+			if (dy > dx)
+			{
+				image.set_pixel (k * (x - pos_0.*axis_0) + pos_0.*axis_1, x, Color::Blue);
+				image.set_pixel (k * (x - pos_0.*axis_0) + pos_0.*axis_1 + 1, x, Color::Blue);
+				image.set_pixel (k * (x - pos_0.*axis_0) + pos_0.*axis_1 - 1, x, Color::Blue);
+			}
+			else
+			{
+				image.set_pixel (x, k * (x - pos_0.*axis_0) + pos_0.*axis_1, Color::Blue);
+				image.set_pixel (x, k * (x - pos_0.*axis_0) + pos_0.*axis_1 + 1, Color::Blue);
+				image.set_pixel (x, k * (x - pos_0.*axis_0) + pos_0.*axis_1 - 1, Color::Blue);
+			}
 		}
-	}
-	else
-	{
-		float k = static_cast<float> (dx) / static_cast<float> (dy);
-
-		if (y0 > y1)
-		{
-			std::swap (y0, y1);
-			std::swap (x0, x1);
-		}
-
-		for (int16_t y = y0; y < y1; ++y)
-		{
-			image.set_pixel (k * (y - y0) + x0, y, Color::Blue);
-			image.set_pixel (k * (y - y0) + x0 + 1, y, Color::Blue);
-			image.set_pixel (k * (y - y0) + x0 - 1, y, Color::Blue);
-		}
-	}
 }
 //=============================================================================
 
@@ -79,10 +73,14 @@ Tool_manager::Tool_manager () :
 
 bool Tool_manager::on_mouse_press   (const Event::Mouse_click &click)
 {
-	prev_pos = Vector2p (click.x, click.y);
-	applying = true;
+	if (canvas.contains (click.x, click.y))
+	{
+		prev_pos = Vector2p (click.x, click.y) - canvas.pos;
+		applying = true;
+		return true;
+	}
 
-	return true;
+	return false;
 }
 //_____________________________________________________________________________
 
@@ -97,10 +95,13 @@ bool Tool_manager::on_mouse_move    (const Event::Mouse_move &move)
 {
 	if (applying)
 	{
-		Vector2p curr_pos = Vector2p (move.x, move.y);
-		tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos);
-		prev_pos = curr_pos;
-		return true;
+		if (canvas.contains (move.x, move.y))
+		{
+			Vector2p curr_pos = Vector2p (move.x, move.y) - canvas.pos;
+			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos);
+			prev_pos = curr_pos;
+			return true;
+		}
 	}
 
 	return false;
