@@ -47,6 +47,9 @@ protected:
 
 public:
 	Abstract_window () = default;
+	virtual ~Abstract_window ();
+
+	void add_subwindow (Abstract_window *win);
 };
 //=============================================================================
 
@@ -60,6 +63,7 @@ protected:
 
 public:
 	Window () = default;
+	//virtual ~Window () = default;
 	Window (Vector2p _pos);
 	Window (int16_t x, int16_t y);
 

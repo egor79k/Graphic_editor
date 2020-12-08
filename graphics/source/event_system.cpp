@@ -88,6 +88,14 @@ Clickable::Clickable ()
 }
 //_____________________________________________________________________________
 
+Clickable::~Clickable ()
+{
+	//Event_system::deattach_mouse_press (this);
+	//Event_system::deattach_mouse_release (this);
+	//Event_system::deattach_mouse_move (this);
+}
+//_____________________________________________________________________________
+
 bool Clickable::handle_mouse_press (const Event::Mouse_click &click)
 {
 	return on_mouse_press (click);
@@ -115,6 +123,12 @@ bool Clickable::handle_mouse_move (const Event::Mouse_move &move)
 Drawable::Drawable ()
 {
 	Event_system::attach_redraw (this);
+}
+//_____________________________________________________________________________
+
+Drawable::~Drawable ()
+{
+	//Event_system::deattach_redraw (this);
 }
 //_____________________________________________________________________________
 

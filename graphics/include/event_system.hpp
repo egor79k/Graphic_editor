@@ -38,6 +38,7 @@ class Drawable
 {
 public:
 	Drawable ();
+	virtual ~Drawable ();
 
 	virtual void handle_redraw ();
 	virtual void on_redraw () = 0;
@@ -51,6 +52,7 @@ class Clickable
 {
 public:
 	Clickable ();
+	virtual ~Clickable ();
 
 	virtual bool handle_mouse_press   (const Event::Mouse_click &click);
 	virtual bool handle_mouse_release (const Event::Mouse_click &click);

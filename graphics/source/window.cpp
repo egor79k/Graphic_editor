@@ -5,45 +5,19 @@
 // ::::  Abstract_window  ::::
 //=============================================================================
 
-
-/*
-void Abstract_window::handle_redraw ()
+ Abstract_window::~Abstract_window ()
 {
-	for (auto win: subwindows)
-		win->handle_redraw ();
+	//for (auto window: subwindows)
+		//delete window;
 
-	on_redraw ();
-}*/
-//_____________________________________________________________________________
-/*
-bool Abstract_window::handle_mouse_press (const Event::Mouse_click &click)
-{
-	for (auto win: subwindows)
-		if (win->handle_mouse_press (click))
-			return true;
-
-	return on_mouse_press (click);
+	//subwindows.clear ();
 }
-//_____________________________________________________________________________
 
-bool Abstract_window::handle_mouse_release (const Event::Mouse_click &click)
+void Abstract_window::add_subwindow (Abstract_window *win)
 {
-	for (auto win: subwindows)
-		if (win->handle_mouse_release (click))
-			return true;
-
-	return on_mouse_release (click);
+	subwindows.push_back (win);
+	win->parent_window = this;
 }
-//_____________________________________________________________________________
-
-bool Abstract_window::handle_mouse_move (const Event::Mouse_move &move)
-{
-	for (auto win: subwindows)
-		if (win->handle_mouse_move (move))
-			return true;
-
-	return on_mouse_move (move);
-}*/
 //=============================================================================
 
 
@@ -80,29 +54,6 @@ void Window::set_position (const int16_t x, const int16_t y)
 {
 	pos = {x, y};
 }
-//_____________________________________________________________________________
-/*
-void Window::on_redraw ()
-{}
-//_____________________________________________________________________________
-
-bool Window::on_mouse_press   (const Event::Mouse_click &click)
-{
-	return false;
-}
-//_____________________________________________________________________________
-
-bool Window::on_mouse_release (const Event::Mouse_click &click)
-{
-	return false;
-}
-//_____________________________________________________________________________
-
-bool Window::on_mouse_move    (const Event::Mouse_move &move)
-{
-	return false;
-}*/
-//_____________________________________________________________________________
 //=============================================================================
 
 
