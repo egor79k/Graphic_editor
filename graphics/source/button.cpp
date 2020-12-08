@@ -125,9 +125,9 @@ const Vector2s Rectangle_button::get_size ()
 // ::::  Texture_button  ::::
 //=============================================================================
 
-Texture_button::Texture_button (const Image_scheme &img_shm, const Vector2p pos) :
+Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p pos) :
 	Abstract_button (pos),
-	texture ({Engine::Texture (img_shm.released), Engine::Texture (img_shm.hovered), Engine::Texture (img_shm.pressed)})
+	texture (_texture)
 {
 	curr_texture = &texture.released;
 	size = curr_texture->get_size ();

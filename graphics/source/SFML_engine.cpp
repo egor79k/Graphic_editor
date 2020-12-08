@@ -131,6 +131,12 @@ SFML_engine::Texture::Texture (const char *texture_file)
 }
 
 
+SFML_engine::Texture::Texture (const char *texture_file, const Vector2<Vector2s> &area)
+{
+	texture.loadFromFile (texture_file, sf::IntRect (area.x.x, area.x.y, area.y.x, area.y.y));
+}
+
+
 void SFML_engine::Texture::draw_sprite (const Vector2p pos)
 {
 	sf::Sprite sprite (texture);

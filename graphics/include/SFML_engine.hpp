@@ -60,6 +60,7 @@ public:
 		
 	public:
 		Texture (const char *texture_file);
+		Texture (const char *texture_file, const Vector2<Vector2s> &area);
 
 		void draw_sprite (const Vector2p pos);
 		void draw_sprite (const Vector2p pos, const Vector2s size);

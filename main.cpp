@@ -17,18 +17,11 @@ int main (int argc, char *argv[])
 
 	Application::initialize (Win_w, Win_h, "Native text");
 
-	//Rectangle_window rect ({20, 20}, {100, 100}, Color::Red);
-	//Texture_window twin ("graphics/textures/arrow_up_released.png", {200, 200});
-	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {10, 10});
-	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {10, 300}, {50, 50});
-	//Canvas cnv ({600, 300}, {100, 100});
 	Tool_manager tmg;
-	//app.add_window (&rect);
+	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {Win_w - 130, 10});
+	Texture_button pencil ({{"graphics/textures/graphic_tool_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{0, 0}, {64, 64}}}}, {20, 100});
+	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {10, 300}, {50, 50});
 	
-
-	//Big_image bimg (argv[1], {100, 100}, {900, 500});
-	//Application::add_window (&bimg);
-
 	Vector2s size (128, 128);
 	bool growup = false;
 

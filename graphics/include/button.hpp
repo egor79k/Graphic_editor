@@ -73,7 +73,7 @@ private:
 	Texture_scheme texture;
 
 public:
-	Texture_button (const Image_scheme &img_shm, const Vector2p pos = Vector2p ());
+	Texture_button (const Texture_scheme &_texture, const Vector2p pos = Vector2p ());
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);

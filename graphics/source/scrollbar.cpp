@@ -11,9 +11,9 @@ Scrollbar::Scrollbar (Scrollable_window *swin, const Vector2p pos, uint32_t _hei
 	Window (pos),
 	scroll_window (swin),
 	height (_height),
-	arrow_up ({init.up.released, init.up.released, init.up.pressed}, pos),
-	arrow_down ({init.down.released, init.down.released, init.down.pressed}),
-	slider ({init.slider.released, init.slider.released, init.slider.pressed})
+	arrow_up ({Engine::Texture (init.up.released), Engine::Texture (init.up.released), Engine::Texture (init.up.pressed)}, pos),
+	arrow_down ({Engine::Texture (init.down.released), Engine::Texture (init.down.released), Engine::Texture (init.down.pressed)}),
+	slider ({Engine::Texture (init.slider.released), Engine::Texture (init.slider.released), Engine::Texture (init.slider.pressed)})
 {
 	slider_pos_up = pos.y + arrow_up.get_size ().y;
 	slider_pos_down = pos.y + height - arrow_down.get_size ().y - slider.get_size ().y;
