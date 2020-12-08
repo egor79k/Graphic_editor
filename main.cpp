@@ -3,18 +3,12 @@
 #include "graphics/include/scrollbar.hpp"
 
 
-const int Win_w = 1080;
-const int Win_h = 700;
+const int Win_w = 1280;
+const int Win_h = 720;
 
 
 int main (int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		printf("Wrong arguments!\n");
-		return 0;
-	}
-
 	Application::initialize (Win_w, Win_h, "Native text");
 
 	Tool_manager tmg;
