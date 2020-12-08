@@ -5,10 +5,10 @@
 // ::::  Event_system  ::::
 //=============================================================================
 
-std::vector<Abstract_window *> Event_system::attached_on_redraw;
-std::vector<Abstract_window *> Event_system::attached_on_mouse_press;
-std::vector<Abstract_window *> Event_system::attached_on_mouse_release;
-std::vector<Abstract_window *> Event_system::attached_on_mouse_move;
+std::vector<Drawable *> Event_system::attached_on_redraw;
+std::vector<Clickable *> Event_system::attached_on_mouse_press;
+std::vector<Clickable *> Event_system::attached_on_mouse_release;
+std::vector<Clickable *> Event_system::attached_on_mouse_move;
 //-----------------------------------------------------------------------------
 
 void Event_system::dispatch_redraw ()
@@ -51,25 +51,75 @@ void Event_system::dispatch_event ()
 }
 //-----------------------------------------------------------------------------
 
-void Event_system::attach_redraw (Abstract_window *window)
+void Event_system::attach_redraw (Drawable *window)
 {
 	attached_on_redraw.push_back (window);
 }
 
-void Event_system::attach_mouse_press (Abstract_window *window)
+void Event_system::attach_mouse_press (Clickable *window)
 {
 	attached_on_mouse_press.push_back (window);
 }
 //-----------------------------------------------------------------------------
 
-void Event_system::attach_mouse_release (Abstract_window *window)
+void Event_system::attach_mouse_release (Clickable *window)
 {
 	attached_on_mouse_release.push_back (window);
 }
 //-----------------------------------------------------------------------------
 
-void Event_system::attach_mouse_move (Abstract_window *window)
+void Event_system::attach_mouse_move (Clickable *window)
 {
 	attached_on_mouse_move.push_back (window);
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Clickable  ::::
+//=============================================================================
+
+Clickable::Clickable ()
+{
+	Event_system::attach_mouse_press (this);
+	Event_system::attach_mouse_release (this);
+	Event_system::attach_mouse_move (this);
+}
+//_____________________________________________________________________________
+
+bool Clickable::handle_mouse_press (const Event::Mouse_click &click)
+{
+	return on_mouse_press (click);
+}
+//_____________________________________________________________________________
+
+bool Clickable::handle_mouse_release (const Event::Mouse_click &click)
+{
+	return on_mouse_release (click);
+}
+//_____________________________________________________________________________
+
+bool Clickable::handle_mouse_move (const Event::Mouse_move &move)
+{
+	return on_mouse_move (move);
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Drawable  ::::
+//=============================================================================
+
+Drawable::Drawable ()
+{
+	Event_system::attach_redraw (this);
+}
+//_____________________________________________________________________________
+
+void Drawable::handle_redraw ()
+{
+	on_redraw ();
 }
 //=============================================================================

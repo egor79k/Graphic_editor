@@ -5,15 +5,17 @@
 // ::::  Abstract_window  ::::
 //=============================================================================
 
+
+/*
 void Abstract_window::handle_redraw ()
 {
 	for (auto win: subwindows)
 		win->handle_redraw ();
 
 	on_redraw ();
-}
+}*/
 //_____________________________________________________________________________
-
+/*
 bool Abstract_window::handle_mouse_press (const Event::Mouse_click &click)
 {
 	for (auto win: subwindows)
@@ -41,7 +43,7 @@ bool Abstract_window::handle_mouse_move (const Event::Mouse_move &move)
 			return true;
 
 	return on_mouse_move (move);
-}
+}*/
 //=============================================================================
 
 
@@ -79,7 +81,7 @@ void Window::set_position (const int16_t x, const int16_t y)
 	pos = {x, y};
 }
 //_____________________________________________________________________________
-
+/*
 void Window::on_redraw ()
 {}
 //_____________________________________________________________________________
@@ -99,7 +101,7 @@ bool Window::on_mouse_release (const Event::Mouse_click &click)
 bool Window::on_mouse_move    (const Event::Mouse_move &move)
 {
 	return false;
-}
+}*/
 //_____________________________________________________________________________
 //=============================================================================
 

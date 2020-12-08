@@ -1,11 +1,13 @@
 #ifndef _GRED_TOOLS_HPP_
 #define _GRED_TOOLS_HPP_
 
-#include "window.hpp"
-#include "pixel_array.hpp"
 #include <cmath>
 #include <vector>
 #include <memory>
+
+#include "window.hpp"
+#include "pixel_array.hpp"
+#include "event_system.hpp"
 
 //=============================================================================
 class Abstract_tool
@@ -33,7 +35,7 @@ public:
 
 
 //=============================================================================
-class Tool_manager : public Rectangle_window
+class Tool_manager : public Rectangle_window, public Clickable
 {
 protected:
 	enum {

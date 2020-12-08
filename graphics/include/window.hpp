@@ -43,27 +43,17 @@ class Abstract_window
 {
 protected:
 	std::vector<Abstract_window *> subwindows;
+	Abstract_window *parent_window;
 
 public:
 	Abstract_window () = default;
-
-
-	virtual void handle_redraw ();
-	virtual bool handle_mouse_press   (const Event::Mouse_click &click);
-	virtual bool handle_mouse_release (const Event::Mouse_click &click);
-	virtual bool handle_mouse_move    (const Event::Mouse_move &move);
-
-	virtual void on_redraw () = 0;
-	virtual bool on_mouse_press   (const Event::Mouse_click &click) = 0;
-	virtual bool on_mouse_release (const Event::Mouse_click &click) = 0;
-	virtual bool on_mouse_move    (const Event::Mouse_move &move) = 0;
 };
 //=============================================================================
 
 
 
 //=============================================================================
-class Window : public Abstract_window
+class Window : public Abstract_window, public Drawable
 {
 protected:
 	Vector2p pos;
@@ -76,11 +66,6 @@ public:
 	const Vector2p &get_position () const;
 	void set_position (const Vector2p _pos);
 	void set_position (const int16_t x, const int16_t y);
-
-	virtual void on_redraw ();
-	virtual bool on_mouse_press   (const Event::Mouse_click &click);
-	virtual bool on_mouse_release (const Event::Mouse_click &click);
-	virtual bool on_mouse_move    (const Event::Mouse_move &move);
 };
 //=============================================================================
 

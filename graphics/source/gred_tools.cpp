@@ -58,15 +58,15 @@ void Pencil::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1)
 //=============================================================================
 
 Tool_manager::Tool_manager () :
-	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x / 8, Engine::get_size ().y)),
+	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x / 8, Engine::get_size ().y), Color (220, 220, 220)),
 	tools (TOOLS_NUM),
 	curr_tool (PENCIL),
 	canvas ({300, 10}, {600, 600}),
 	applying (false)
 {
-	Event_system::attach_mouse_press (this);
-	Event_system::attach_mouse_release (this);
-	Event_system::attach_mouse_move(this);
+	//Event_system::attach_mouse_press (this);
+	//Event_system::attach_mouse_release (this);
+	//Event_system::attach_mouse_move(this);
 
 	tools[PENCIL] = std::move (std::unique_ptr<Abstract_tool> (new Pencil));
 }

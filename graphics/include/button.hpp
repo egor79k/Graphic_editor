@@ -9,6 +9,7 @@ class Texture_button;
 
 
 #include "window.hpp"
+#include "event_system.hpp"
 
 //=============================================================================
 template <typename T>
@@ -27,7 +28,7 @@ typedef Button_scheme<Engine::Texture> Texture_scheme;
 
 
 //=============================================================================
-class Abstract_button : public Window
+class Abstract_button : public Window, public Clickable
 {
 public:
 	Abstract_button (const Vector2p pos);

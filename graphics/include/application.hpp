@@ -12,11 +12,7 @@ class Application;
 
 //=============================================================================
 class Application
-{
-private:
-	static std::vector<Window *> windows;
-
-	
+{	
 public:
 	Application () = delete;
 
@@ -25,8 +21,6 @@ public:
 	static void step ();
 
 	static void run ();
-
-	static void add_window (Window *window);
 };
 //=============================================================================
 

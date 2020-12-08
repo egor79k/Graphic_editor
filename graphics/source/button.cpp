@@ -8,9 +8,9 @@
 Abstract_button::Abstract_button (const Vector2p pos) :
 	Window (pos)
 {
-	Event_system::attach_mouse_press (this);
-	Event_system::attach_mouse_release (this);
-	Event_system::attach_mouse_move (this);
+	//Event_system::attach_mouse_press (this);
+	//Event_system::attach_mouse_release (this);
+	//Event_system::attach_mouse_move (this);
 }
 //=============================================================================
 
@@ -180,7 +180,8 @@ bool Texture_button::on_mouse_move (const Event::Mouse_move &move)
 		if (contains (move.x, move.y))
 		{
 			curr_texture = &texture.hovered;
-			return true;
+			return false;
+			// If return true problem with hovering neighbour buttons
 		}
 
 		if (hovered ())
