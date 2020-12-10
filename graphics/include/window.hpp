@@ -43,7 +43,7 @@ class Abstract_window
 {
 protected:
 	std::vector<Abstract_window *> subwindows;
-	Abstract_window *parent_window;
+	//Abstract_window *parent_window;
 
 public:
 	Abstract_window () = default;

@@ -28,7 +28,7 @@ typedef Button_scheme<Engine::Texture> Texture_scheme;
 
 
 //=============================================================================
-class Abstract_button : public Window, public Clickable
+class Abstract_button : public Window, public Hoverable
 {
 public:
 	Abstract_button (const Vector2p pos);

@@ -5,9 +5,9 @@
 #include <vector>
 #include <memory>
 
+#include "event_system.hpp"
 #include "window.hpp"
 #include "pixel_array.hpp"
-#include "event_system.hpp"
 
 //=============================================================================
 class Abstract_tool
@@ -35,7 +35,7 @@ public:
 
 
 //=============================================================================
-class Tool_manager : public Rectangle_window, public Clickable
+class Tool_manager : public Rectangle_window, public Hoverable
 {
 protected:
 	enum {

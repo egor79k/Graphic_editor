@@ -16,7 +16,7 @@
 void Abstract_window::add_subwindow (Abstract_window *win)
 {
 	subwindows.push_back (win);
-	win->parent_window = this;
+	//win->parent_window = this;
 }
 //=============================================================================
 
