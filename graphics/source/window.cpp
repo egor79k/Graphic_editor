@@ -7,16 +7,17 @@
 
  Abstract_window::~Abstract_window ()
 {
-	//for (auto window: subwindows)
-		//delete window;
+	for (auto window: subwindows)
+		delete window;
 
-	//subwindows.clear ();
+	subwindows.clear ();
 }
+//_____________________________________________________________________________
 
-void Abstract_window::add_subwindow (Abstract_window *win)
+template<typename T, typename... Args>
+void Abstract_window::create_subwindow (Args&... args)
 {
-	subwindows.push_back (win);
-	//win->parent_window = this;
+	subwindows.emplace_back (new T (args...));
 }
 //=============================================================================
 

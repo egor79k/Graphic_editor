@@ -49,7 +49,8 @@ public:
 	Abstract_window () = default;
 	virtual ~Abstract_window ();
 
-	void add_subwindow (Abstract_window *win);
+	template<typename T, typename... Args>
+	void create_subwindow (Args&... args);
 };
 //=============================================================================
 

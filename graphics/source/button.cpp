@@ -5,8 +5,9 @@
 // ::::  Abstract_button  ::::
 //=============================================================================
 
-Abstract_button::Abstract_button (const Vector2p pos) :
-	Window (pos)
+Abstract_button::Abstract_button (const Vector2p pos, Button_reactive *_window) :
+	Window (pos),
+	window (_window)
 {
 	//Event_system::attach_mouse_press (this);
 	//Event_system::attach_mouse_release (this);
@@ -20,8 +21,8 @@ Abstract_button::Abstract_button (const Vector2p pos) :
 // ::::  Rectangle_button  ::::
 //=============================================================================
 
-Rectangle_button::Rectangle_button (const Color_scheme &clr_shm, const Vector2p pos, const Vector2s sz) :
-	Abstract_button (pos),
+Rectangle_button::Rectangle_button (const Color_scheme &clr_shm, const Vector2p pos, const Vector2s sz, Button_reactive *window) :
+	Abstract_button (pos, window),
 	size (sz),
 	color (clr_shm)
 {
@@ -40,6 +41,10 @@ bool Rectangle_button::on_mouse_press (const Event::Mouse_click &click)
 	if (contains (click.x, click.y))
 	{
 		curr_color = &color.pressed;
+
+		if (window != nullptr)
+			window->on_button_press (this);
+
 		return true;
 	}
 
@@ -61,6 +66,10 @@ bool Rectangle_button::on_mouse_release (const Event::Mouse_click &click)
 			curr_color = &color.released;
 			// no action ()
 		}
+
+		if (window != nullptr)
+			window->on_button_release (this);
+
 		return true;
 	}
 
@@ -89,7 +98,7 @@ bool Rectangle_button::on_mouse_move (const Event::Mouse_move &move)
 }
 //_____________________________________________________________________________
 
-bool Rectangle_button::contains (int x, int y)
+bool Rectangle_button::contains (int16_t x, int16_t y)
 {
 	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
 }
@@ -125,8 +134,8 @@ const Vector2s Rectangle_button::get_size ()
 // ::::  Texture_button  ::::
 //=============================================================================
 
-Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p pos) :
-	Abstract_button (pos),
+Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p pos, Button_reactive *window) :
+	Abstract_button (pos, window),
 	texture (_texture)
 {
 	curr_texture = &texture.released;
@@ -145,6 +154,10 @@ bool Texture_button::on_mouse_press (const Event::Mouse_click &click)
 	if (contains (click.x, click.y))
 	{
 		curr_texture = &texture.pressed;
+
+		if (window != nullptr)
+			window->on_button_press (this);
+
 		return true;
 	}
 
@@ -166,6 +179,10 @@ bool Texture_button::on_mouse_release (const Event::Mouse_click &click)
 			curr_texture = &texture.released;
 			// no action ()
 		}
+
+		if (window != nullptr)
+			window->on_button_release (this);
+
 		return true;
 	}
 
@@ -195,7 +212,7 @@ bool Texture_button::on_mouse_move (const Event::Mouse_move &move)
 }
 //_____________________________________________________________________________
 
-bool Texture_button::contains (int x, int y)
+bool Texture_button::contains (int16_t x, int16_t y)
 {
 	return (pos.x < x && x < (pos.x + size.x) && pos.y < y && y < (pos.y + size.y));
 }

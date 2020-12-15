@@ -72,7 +72,7 @@ Tool_manager::Tool_manager () :
 }
 //_____________________________________________________________________________
 
-bool Tool_manager::on_mouse_press   (const Event::Mouse_click &click)
+bool Tool_manager::on_mouse_press (const Event::Mouse_click &click)
 {
 	if (canvas.contains (click.x, click.y))
 	{
@@ -92,7 +92,7 @@ bool Tool_manager::on_mouse_release (const Event::Mouse_click &click)
 }
 //_____________________________________________________________________________
 
-bool Tool_manager::on_mouse_move    (const Event::Mouse_move &move)
+bool Tool_manager::on_mouse_move (const Event::Mouse_move &move)
 {
 	if (applying)
 	{
@@ -103,6 +103,24 @@ bool Tool_manager::on_mouse_move    (const Event::Mouse_move &move)
 			prev_pos = curr_pos;
 			return true;
 		}
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Tool_manager::on_button_press (Abstract_button *button)
+{
+	return true;
+}
+//_____________________________________________________________________________
+
+bool Tool_manager::on_button_release (Abstract_button *button)
+{
+	if (button->hovered ())
+	{
+		// do action
+		return true;
 	}
 
 	return false;

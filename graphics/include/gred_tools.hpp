@@ -5,9 +5,10 @@
 #include <vector>
 #include <memory>
 
+#include "button.hpp"
 #include "event_system.hpp"
-#include "window.hpp"
 #include "pixel_array.hpp"
+#include "window.hpp"
 
 //=============================================================================
 class Abstract_tool
@@ -35,7 +36,7 @@ public:
 
 
 //=============================================================================
-class Tool_manager : public Rectangle_window, public Hoverable
+class Tool_manager : public Rectangle_window, public Hoverable, public Button_reactive
 {
 protected:
 	enum {
@@ -56,6 +57,8 @@ public:
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
 	virtual bool on_mouse_release (const Event::Mouse_click &click);
 	virtual bool on_mouse_move    (const Event::Mouse_move &move);
+	virtual bool on_button_press   (Abstract_button *button);
+	virtual bool on_button_release (Abstract_button *button);
 };
 //=============================================================================
 
