@@ -33,6 +33,7 @@ public:
 
 
 	static sf::RenderWindow window;
+	static sf::Font text_font;
 
 	static void initialize (int width, int height, const char *window_header);
 
@@ -73,6 +74,7 @@ public:
 	{
 		static void rectangle (const Vector2p pos, const Vector2s size, const Color &col);
 		static void image (const Vector2p pos, const Pixel_array &image);
+		static void text (const Vector2p pos, const char *string, const int size, const Color &col);
 	};
 };
 

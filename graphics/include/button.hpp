@@ -120,4 +120,38 @@ public:
 };
 //=============================================================================
 
+
+
+//=============================================================================
+class Slider_reactive
+{
+	Slider_reactive () = default;
+
+	virtual ~Slider_reactive () = default;
+
+	virtual bool on_slider_move () = 0;
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Slider : public Rectangle_window, public Hoverable
+{
+protected:
+	int cursor;
+	int16_t Vector2p::*axis;
+	Rectangle_button *slider;
+
+public:
+	Slider () = default;
+	Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size);
+
+	virtual bool handle_event (const Event &event);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	virtual bool on_mouse_move    (const Event::Mouse_move &move);
+};
+//=============================================================================
+
 #endif // _BUTTON_HPP_

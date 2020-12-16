@@ -58,6 +58,73 @@ void Pencil::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const To
 //=============================================================================
 
 
+//=============================================================================
+// ::::  Filler  ::::
+//=============================================================================
+
+void Filler::fill_area (Pixel_array &image, Vector2p pos_0, const Color &color)
+{
+/*	const Color old_color = image.get_pixel (pos_0.x, pos_0.y);
+	const Vector2s size = image.get_size ();
+
+	if ((pos_0.y - 1) >= 0 && image.get_pixel (pos_0.x, pos_0.y - 1) == old_color)
+		fill_area (image, {pos_0.x, pos_0.y - 1}, color);
+
+	if ((pos_0.y + 1) < size.y && image.get_pixel (pos_0.x, pos_0.y + 1) == old_color)
+		fill_area (image, {pos_0.x, pos_0.y + 1}, color);
+
+	if ((pos_0.x - 1) >= 0 && image.get_pixel (pos_0.x - 1, pos_0.y) == old_color)
+		fill_area (image, {pos_0.x - 1, pos_0.y}, color);
+
+	if ((pos_0.x + 1) < size.x && image.get_pixel (pos_0.x + 1, pos_0.y) == old_color)
+		fill_area (image, {pos_0.x + 1, pos_0.y}, color);
+
+	image.set_pixel (pos_0.x, pos_0.y, color);*/
+}
+
+void Filler::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop)
+{
+	//fill_area (image, pos_0, prop.color);
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Palette  ::::
+//=============================================================================
+
+const Color Palette::palette_bkg_color = Color (220, 220, 220);
+const Vector2s Palette::palette_size = {300, 400};
+const Vector2s Palette::shade_field_size = {256, 256};
+const Vector2s Palette::color_line_size  = {256, 25};
+//_____________________________________________________________________________
+
+Palette::Palette (const Vector2p pos) :
+	Rectangle_window (pos, palette_size, palette_bkg_color),
+	shade_field (shade_field_size, Color::White),
+	color_line (color_line_size, Color::White)
+{
+	//for (int x = 0; x < color_line_size.x; ++x)
+	//	for (int y = 0; y < color_line_size.y; ++y)
+	//		color_line.set_pixel (x, y, Color (255, x))
+}
+
+bool Palette::handle_event (const Event &event)
+{
+	return false;
+}
+bool Palette::on_mouse_press   (const Event::Mouse_click &click)
+{
+	return false;
+}
+bool Palette::on_mouse_release (const Event::Mouse_click &click)
+{
+	return false;
+}
+//=============================================================================
+
+
 
 //=============================================================================
 // ::::  Tool_manager  ::::
@@ -71,14 +138,18 @@ const Texture_scheme Tool_manager::default_textures[] = {
 //_____________________________________________________________________________
 
 Tool_manager::Tool_manager () :
-	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x / 8, Engine::get_size ().y), Color (220, 220, 220)),
+	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x / 8, Engine::get_size ().y), Palette::palette_bkg_color),
 	curr_tool (PENCIL),
-	properties ({Color::Blue, 25}),
+	properties ({Color::Blue, 5}),
 	tools (TOOLS_NUM),
 	applying (false),
 	canvas ({300, 10}, {600, 600})
 {
+	Event_system::attach_redraw (&canvas);
+
 	tools[PENCIL] = std::move (std::unique_ptr<Abstract_tool> (new Pencil));
+	tools[ERASER] = std::move (std::unique_ptr<Abstract_tool> (new Eraser));
+	tools[FILLER] = std::move (std::unique_ptr<Abstract_tool> (new Filler));
 
 	subwindows.push_back (new Texture_button (default_textures[PENCIL], {20, 64}, this));
 	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this));
@@ -110,7 +181,18 @@ bool Tool_manager::on_mouse_press (const Event::Mouse_click &click)
 
 bool Tool_manager::on_mouse_release (const Event::Mouse_click &click)
 {
-	applying = false;
+	if (applying)
+	{
+		Vector2p curr_pos = Vector2p (click.x, click.y) - canvas.pos;
+		if (curr_tool != ERASER)
+			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, properties);
+		else
+			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, {canvas.get_color (), properties.thickness});
+
+		applying = false;
+		return true;
+	}
+
 	return false;
 }
 //_____________________________________________________________________________
@@ -122,7 +204,10 @@ bool Tool_manager::on_mouse_move (const Event::Mouse_move &move)
 		if (canvas.contains (move.x, move.y))
 		{
 			Vector2p curr_pos = Vector2p (move.x, move.y) - canvas.pos;
-			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, properties);
+			if (curr_tool != ERASER)
+				tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, properties);
+			else
+				tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, {canvas.get_color (), properties.thickness});
 			prev_pos = curr_pos;
 			return true;
 		}
@@ -147,6 +232,7 @@ bool Tool_manager::on_button_release (Abstract_button *button)
 			if (subwindows[tool] == button)
 				break;
 		printf ("Tool %d choosed\n", tool);
+		curr_tool = tool;
 		return true;
 	}
 

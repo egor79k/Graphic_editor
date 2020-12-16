@@ -2,11 +2,12 @@
 
 
 sf::RenderWindow SFML_engine::window (sf::VideoMode (100, 100), "Text");
-
+sf::Font SFML_engine::text_font;
 
 void SFML_engine::initialize (int width, int height, const char *window_header)
 {
 	window.create (sf::VideoMode (width, height), window_header);
+	text_font.loadFromFile ("graphics/Crystal_Regular.ttf");
 }
 
 
@@ -188,4 +189,13 @@ void SFML_engine::draw::image (const Vector2p pos, const Pixel_array &image)
 	sf::Sprite sprite (texture);
 	sprite.setPosition (pos.x, pos.y);
 	window.draw (sprite);
+}
+
+
+void SFML_engine::draw::text (const Vector2p pos, const char *string, const int size, const Color &col)
+{
+	sf::Text text_str (string, text_font, size);
+	text_str.setFillColor (sf::Color (col.r, col.g, col.b, col.a));
+	text_str.setPosition (pos.x, pos.y);
+	window.draw (text_str);
 }

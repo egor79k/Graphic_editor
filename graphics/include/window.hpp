@@ -103,6 +103,26 @@ public:
 
 
 //=============================================================================
+class Dragable_rectangle_window : public Rectangle_window, public Hoverable
+{
+protected:
+	bool pressed;
+	Vector2p cursor;
+
+public:
+	Dragable_rectangle_window () = default;
+	Dragable_rectangle_window (const Vector2p _pos, const Vector2s _size, const Color &_color = Color::White);
+
+	virtual bool handle_event (const Event &event);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	virtual bool on_mouse_move    (const Event::Mouse_move &move);
+};
+//=============================================================================
+
+
+
+//=============================================================================
 class Texture_window : public Window
 {
 protected:
@@ -131,6 +151,8 @@ protected:
 
 public:
 	Canvas (const Vector2p pos, const Vector2s size, const Color &color = Color::White);
+
+	void clear ();
 
 	virtual void on_redraw ();
 

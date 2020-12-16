@@ -17,6 +17,8 @@ int main (int argc, char *argv[])
 //	Texture_button eraser ({{"graphics/textures/graphic_tool_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{64, 0}, {64, 64}}}}, {20, 128}, &tmg);
 //	Texture_button filler ({{"graphics/textures/graphic_tool_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{128, 0}, {64, 64}}}}, {20, 192}, &tmg);
 	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {10, 300}, {50, 50});
+	Dragable_rectangle_window dragw ({100, 100}, {100, 100}, Color::Green);
+	Slider slider_x ({20, 500}, {200, 10}, Color::Black, &Vector2p::x, {{255, 0, 0}, {240, 0, 0}, {200, 0, 0}}, {20, 30});
 	
 	Event_system::attach (&tmg);
 	Event_system::attach (&tbut);
@@ -24,6 +26,19 @@ int main (int argc, char *argv[])
 //	Event_system::attach (&eraser);
 //	Event_system::attach (&filler);
 	Event_system::attach (&rbut);
+	Event_system::attach (&dragw);
+	Event_system::attach (&slider_x);
+//	Event_system::attach (&slider_y);
+
+	Event_system::attach_redraw (&tmg);
+	Event_system::attach_redraw (&tbut);
+//	Event_system::attach_redraw (&pencil);
+//	Event_system::attach_redraw (&eraser);
+//	Event_system::attach_redraw (&filler);
+	Event_system::attach_redraw (&rbut);
+	Event_system::attach_redraw (&dragw);
+	Event_system::attach_redraw (&slider_x);
+//	Event_system::attach_redraw (&slider_y);
 
 	Vector2s size (128, 128);
 	bool growup = false;

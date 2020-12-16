@@ -8,11 +8,7 @@
 Abstract_button::Abstract_button (const Vector2p pos, Button_reactive *_window) :
 	Window (pos),
 	window (_window)
-{
-	//Event_system::attach_mouse_press (this);
-	//Event_system::attach_mouse_release (this);
-	//Event_system::attach_mouse_move (this);
-}
+{}
 //_____________________________________________________________________________
 
 bool Abstract_button::handle_event (const Event &event)
@@ -249,5 +245,104 @@ void Texture_button::set_size (const Vector2s sz)
 const Vector2s Texture_button::get_size ()
 {
 	return size;
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Slider_reactive  ::::
+//=============================================================================
+
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Slider  ::::
+//=============================================================================
+
+Slider::Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size) :
+	Rectangle_window (pos, size, color),
+	cursor (),
+	axis (_axis)
+{
+	Vector2p s_pos = pos;
+	if (axis == &Vector2p::x)
+		s_pos.y -= (s_size.y - size.y) / 2;
+	else
+		s_pos.x -= (s_size.x - size.x) / 2;
+
+	slider = new Rectangle_button (clr_shm, s_pos, s_size);
+	subwindows.push_back (slider);
+}
+//_____________________________________________________________________________
+
+bool Slider::handle_event (const Event &event)
+{
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			break;
+
+	return handle_hoverable (event);
+}
+//_____________________________________________________________________________
+
+bool Slider::on_mouse_press (const Event::Mouse_click &click)
+{
+	if (slider->pressed ())
+	{
+		Vector2p click_pos (click.x, click.y);
+		cursor = click_pos.*axis - slider->get_position ().*axis;
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Slider::on_mouse_release (const Event::Mouse_click &click)
+{
+	if (slider->pressed ())
+	{
+		Vector2p click_pos (click.x, click.y);
+		Vector2p new_pos = slider->get_position ();
+		Vector2p sz (size.x, size.y);
+		Vector2p s_sz (slider->get_size ().x, slider->get_size ().y);
+		new_pos.*axis = click_pos.*axis - cursor;
+
+		if (new_pos.*axis < pos.*axis)
+			new_pos.*axis = pos.*axis;
+		else if (new_pos.*axis > pos.*axis + sz.*axis - s_sz.*axis)
+			new_pos.*axis = pos.*axis + sz.*axis - s_sz.*axis;
+
+		slider->set_position (new_pos);
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Slider::on_mouse_move (const Event::Mouse_move &move)
+{
+	if (slider->pressed ())
+	{
+		Vector2p move_pos (move.x, move.y);
+		Vector2p new_pos = slider->get_position ();
+		Vector2p sz (size.x, size.y);
+		Vector2p s_sz (slider->get_size ().x, slider->get_size ().y);
+		new_pos.*axis = move_pos.*axis - cursor;
+
+		if (new_pos.*axis < pos.*axis)
+			new_pos.*axis = pos.*axis;
+		else if (new_pos.*axis > pos.*axis + sz.*axis - s_sz.*axis)
+			new_pos.*axis = pos.*axis + sz.*axis - s_sz.*axis;
+
+		slider->set_position (new_pos);
+		return true;
+	}
+
+	return false;
 }
 //=============================================================================

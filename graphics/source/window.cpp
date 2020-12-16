@@ -41,7 +41,7 @@ void Abstract_window::handle_redraw ()
 Window::Window (Vector2p _pos) :
 	pos (_pos)
 {
-	Event_system::attach_redraw (this);
+	//Event_system::attach_redraw (this);
 }
 //_____________________________________________________________________________
 
@@ -126,6 +126,67 @@ bool Rectangle_window::contains (int x, int y)
 
 
 //=============================================================================
+// ::::  Dragable_rectangle_window  ::::
+//=============================================================================
+
+Dragable_rectangle_window::Dragable_rectangle_window (const Vector2p _pos, const Vector2s _size, const Color &_color) :
+	Rectangle_window (_pos, _size, _color),
+	pressed (false),
+	cursor ()
+{}
+//_____________________________________________________________________________
+
+bool Dragable_rectangle_window::handle_event (const Event &event)
+{
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			return true;
+
+	return handle_hoverable (event);
+}
+//_____________________________________________________________________________
+
+bool Dragable_rectangle_window::on_mouse_press (const Event::Mouse_click &click)
+{
+	if (contains (click.x, click.y))
+	{
+		pressed = true;
+		cursor = Vector2p (click.x - pos.x, click.y - pos.y);
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Dragable_rectangle_window::on_mouse_release (const Event::Mouse_click &click)
+{
+	if (pressed)
+	{
+		pos = Vector2p (click.x, click.y) - cursor;
+		pressed = false;
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Dragable_rectangle_window::on_mouse_move (const Event::Mouse_move &move)
+{
+	if (pressed)
+	{
+		pos = Vector2p (move.x, move.y) - cursor;
+		return true;
+	}
+
+	return false;
+}
+//=============================================================================
+
+
+
+//=============================================================================
 // ::::  Texture_window  ::::
 //=============================================================================
 
@@ -171,6 +232,13 @@ Canvas::Canvas (const Vector2p pos, const Vector2s size, const Color &color) :
 
 }
 //_____________________________________________________________________________
+
+void Canvas::clear ()
+{
+	image.fill (color);
+}
+//_____________________________________________________________________________
+
 void Canvas::on_redraw ()
 {
 	Engine::draw::image (pos, image);

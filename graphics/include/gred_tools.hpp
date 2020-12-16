@@ -12,11 +12,14 @@
 #include "window.hpp"
 
 
+//=============================================================================
 struct Tool_properties
 {
 	Color color;
 	uint8_t thickness = 1;
 };
+//=============================================================================
+
 
 
 //=============================================================================
@@ -39,6 +42,50 @@ public:
 	//virtual void start_apply (Pixel_array &image, const Vector2p pos);
 	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop);
 	//virtual void stop_apply (Pixel_array &image, const Vector2p pos);
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Eraser : public Pencil
+{};
+//=============================================================================
+
+
+
+//=============================================================================
+class Filler : public Abstract_tool
+{
+public:
+	void fill_area (Pixel_array &image, Vector2p pos_0, const Color &color);
+
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop);
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Palette : public Rectangle_window, public Clickable
+{
+protected:
+	Color frg_color;
+	Color bkg_color;
+	Pixel_array shade_field;
+	Pixel_array color_line;
+
+public:
+	static const Color palette_bkg_color;
+	static const Vector2s palette_size;
+	static const Vector2s shade_field_size;
+	static const Vector2s color_line_size;
+	
+	Palette (const Vector2p pos);
+
+	virtual bool handle_event (const Event &event);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
 };
 //=============================================================================
 

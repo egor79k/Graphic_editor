@@ -17,13 +17,8 @@ Pixel_array::Pixel_array (const Vector2s _size, const Color &color) :
 //_____________________________________________________________________________
 
 Pixel_array::Pixel_array (const uint16_t width, const uint16_t height, const Color &color) :
-	pixels (new uint8_t[width * height * sizeof (Color)]),
-	size (width, height)
-{
-	Color *img = reinterpret_cast<Color *> (pixels);
-	for (int i = 0; i < size.x * size.y; ++i)
-		img[i] = color;
-}
+	Pixel_array ({width, height}, color)
+{}
 //_____________________________________________________________________________
 
 Pixel_array::~Pixel_array ()
@@ -53,6 +48,14 @@ const Color &Pixel_array::get_pixel (const Vector2s point) const
 const Color &Pixel_array::get_pixel (const uint16_t x, const uint16_t y) const
 {
 	return *(reinterpret_cast<Color *> (pixels + (y * size.x + x) * sizeof (Color)));
+}
+//_____________________________________________________________________________
+
+void Pixel_array::fill (const Color &color)
+{
+	Color *img = reinterpret_cast<Color *> (pixels);
+	for (int i = 0; i < size.x * size.y; ++i)
+		img[i] = color;
 }
 //_____________________________________________________________________________
 

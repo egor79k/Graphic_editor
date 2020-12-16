@@ -23,6 +23,8 @@ public:
 	const Color &get_pixel (const Vector2s point) const;
 	const Color &get_pixel (const uint16_t x, const uint16_t y) const;
 
+	void fill (const Color &color);
+
 	const Vector2s get_size () const;
 
 	const uint8_t *get_origin () const;
