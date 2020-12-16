@@ -5,6 +5,16 @@
 #include <vector>
 #include <memory>
 
+
+struct Tool_properties;
+class Abstract_tool;
+class Pencil;
+class Eraser;
+class Filler;
+class Palette;
+class Canvas;
+class Tool_manager;
+
 #include "abstract_window.hpp"
 #include "button.hpp"
 #include "event_system.hpp"
@@ -92,6 +102,31 @@ public:
 
 
 //=============================================================================
+class Canvas : public Rectangle_window, public Hoverable
+{
+protected:
+	Pixel_array image;
+	Tool_manager *tool_manager;
+
+public:
+	Canvas (const Vector2p pos, const Vector2s size, Tool_manager *_tool_manager, const Color &color = Color::White);
+
+	void clear ();
+
+	virtual void on_redraw ();
+
+	virtual bool handle_event     (const Event &event);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	virtual bool on_mouse_move    (const Event::Mouse_move &move);
+
+	friend class Tool_manager;
+};
+//=============================================================================
+
+
+
+//=============================================================================
 class Tool_manager : public Rectangle_window, public Hoverable, public Button_reactive
 {
 protected:
@@ -99,23 +134,30 @@ protected:
 		PENCIL,
 		ERASER,
 		FILLER,
-		TOOLS_NUM
+		TOOLS_NUM,
 	};
 
 	int curr_tool;
-	Vector2p prev_pos;
+	Vector2p start_pos;
 	Tool_properties properties;
 	std::vector<std::unique_ptr<Abstract_tool>> tools;
 	bool applying;
 	
-	Canvas canvas;
+	//Canvas canvas;
+	Palette *palette;
 	
 	static const Texture_scheme default_textures[];
 
 public:
-	Tool_manager ();
+	Tool_manager (Palette *_palette);
 
-	virtual bool handle_event (const Event &event);
+	void start_apply (Canvas *canvas, Vector2p pos);
+	void apply (Canvas *canvas, Vector2p pos);
+	void stop_apply (Canvas *canvas, Vector2p pos);
+
+	bool is_applying ();
+
+	virtual bool handle_event     (const Event &event);
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);
 	virtual bool on_mouse_release (const Event::Mouse_click &click);
 	virtual bool on_mouse_move    (const Event::Mouse_move &move);

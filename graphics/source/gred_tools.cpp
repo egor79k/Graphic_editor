@@ -127,6 +127,77 @@ bool Palette::on_mouse_release (const Event::Mouse_click &click)
 
 
 //=============================================================================
+// ::::  Canvas  ::::
+//=============================================================================
+
+Canvas::Canvas (const Vector2p pos, const Vector2s size, Tool_manager *_tool_manager, const Color &color) :
+	Rectangle_window (pos, size, color),
+	image (size, color),
+	tool_manager (_tool_manager)
+{}
+//_____________________________________________________________________________
+
+void Canvas::clear ()
+{
+	image.fill (color);
+}
+//_____________________________________________________________________________
+
+void Canvas::on_redraw ()
+{
+	Engine::draw::image (pos, image);
+}
+//_____________________________________________________________________________
+
+bool Canvas::handle_event (const Event &event)
+{
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			return true;
+
+	return handle_hoverable (event);
+}
+//_____________________________________________________________________________
+
+bool Canvas::on_mouse_press   (const Event::Mouse_click &click)
+{
+	if (contains (click.x, click.y))
+	{
+		tool_manager->start_apply (this, Vector2p (click.x, click.y) - pos);
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Canvas::on_mouse_release (const Event::Mouse_click &click)
+{
+	if (tool_manager->is_applying ())
+	{
+		tool_manager->stop_apply (this, Vector2p (click.x, click.y) - pos);
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Canvas::on_mouse_move    (const Event::Mouse_move &move)
+{
+	if (tool_manager->is_applying () && contains (move.x, move.y))
+	{
+		tool_manager->apply (this, Vector2p (move.x, move.y) - pos);
+		return true;
+	}
+
+	return false;
+}
+//=============================================================================
+
+
+
+//=============================================================================
 // ::::  Tool_manager  ::::
 //=============================================================================
 
@@ -137,15 +208,17 @@ const Texture_scheme Tool_manager::default_textures[] = {
 };
 //_____________________________________________________________________________
 
-Tool_manager::Tool_manager () :
-	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x / 8, Engine::get_size ().y), Palette::palette_bkg_color),
+Tool_manager::Tool_manager (Palette *_palette) :
+	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x >> 3, Engine::get_size ().y), Palette::palette_bkg_color),
 	curr_tool (PENCIL),
+	start_pos (),
 	properties ({Color::Blue, 5}),
 	tools (TOOLS_NUM),
 	applying (false),
-	canvas ({300, 10}, {600, 600})
+	//canvas (Vector2p (Engine::get_size ().x / 8 + 30, 20), Vector2s (Engine::get_size ().x * 5 >> 3, Engine::get_size ().y - 40)),
+	palette (_palette)
 {
-	Event_system::attach_redraw (&canvas);
+	//Event_system::attach_redraw (&canvas);
 
 	tools[PENCIL] = std::move (std::unique_ptr<Abstract_tool> (new Pencil));
 	tools[ERASER] = std::move (std::unique_ptr<Abstract_tool> (new Eraser));
@@ -154,6 +227,41 @@ Tool_manager::Tool_manager () :
 	subwindows.push_back (new Texture_button (default_textures[PENCIL], {20, 64}, this));
 	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this));
 	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this));
+}
+//_____________________________________________________________________________
+
+void Tool_manager::start_apply (Canvas *canvas, Vector2p pos)
+{
+	start_pos = pos;
+	applying = true;
+}
+//_____________________________________________________________________________
+
+void Tool_manager::apply (Canvas *canvas, Vector2p pos)
+{
+	if (curr_tool != ERASER)
+		tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
+	else
+		tools[curr_tool]->apply (canvas->image, start_pos, pos, {canvas->get_color (), properties.thickness});
+
+	start_pos = pos;
+}
+//_____________________________________________________________________________
+
+void Tool_manager::stop_apply (Canvas *canvas, Vector2p pos)
+{
+	if (curr_tool != ERASER)
+		tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
+	else
+		tools[curr_tool]->apply (canvas->image, start_pos, pos, {canvas->get_color (), properties.thickness});
+
+	applying = false;
+}
+//_____________________________________________________________________________
+
+bool Tool_manager::is_applying ()
+{
+	return applying;
 }
 //_____________________________________________________________________________
 
@@ -168,51 +276,51 @@ bool Tool_manager::handle_event (const Event &event)
 
 bool Tool_manager::on_mouse_press (const Event::Mouse_click &click)
 {
-	if (canvas.contains (click.x, click.y))
+/*	if (canvas.contains (click.x, click.y))
 	{
-		prev_pos = Vector2p (click.x, click.y) - canvas.pos;
+		start_pos = Vector2p (click.x, click.y) - canvas.pos;
 		applying = true;
 		return true;
 	}
-
+*/
 	return false;
 }
 //_____________________________________________________________________________
 
 bool Tool_manager::on_mouse_release (const Event::Mouse_click &click)
 {
-	if (applying)
+/*	if (applying)
 	{
 		Vector2p curr_pos = Vector2p (click.x, click.y) - canvas.pos;
 		if (curr_tool != ERASER)
-			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, properties);
+			tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, properties);
 		else
-			tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, {canvas.get_color (), properties.thickness});
+			tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, {canvas.get_color (), properties.thickness});
 
 		applying = false;
 		return true;
 	}
-
+*/
 	return false;
 }
 //_____________________________________________________________________________
 
 bool Tool_manager::on_mouse_move (const Event::Mouse_move &move)
 {
-	if (applying)
+/*	if (applying)
 	{
 		if (canvas.contains (move.x, move.y))
 		{
 			Vector2p curr_pos = Vector2p (move.x, move.y) - canvas.pos;
 			if (curr_tool != ERASER)
-				tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, properties);
+				tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, properties);
 			else
-				tools[curr_tool]->apply (canvas.image, prev_pos, curr_pos, {canvas.get_color (), properties.thickness});
-			prev_pos = curr_pos;
+				tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, {canvas.get_color (), properties.thickness});
+			start_pos = curr_pos;
 			return true;
 		}
 	}
-
+*/
 	return false;
 }
 //_____________________________________________________________________________

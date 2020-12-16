@@ -24,8 +24,8 @@
 class Abstract_window;
 class Window;
 class Rectangle_window;
+class Dragable_rectangle_window;
 class Texture_window;
-class Canvas;
 
 
 #include <vector>
@@ -142,22 +142,5 @@ public:
 //=============================================================================
 
 
-
-//=============================================================================
-class Canvas : public Rectangle_window
-{
-protected:
-	Pixel_array image;
-
-public:
-	Canvas (const Vector2p pos, const Vector2s size, const Color &color = Color::White);
-
-	void clear ();
-
-	virtual void on_redraw ();
-
-	friend class Tool_manager;
-};
-//=============================================================================
 
 #endif // _WINDOW_HPP_
