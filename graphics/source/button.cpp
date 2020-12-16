@@ -249,23 +249,15 @@ const Vector2s Texture_button::get_size ()
 //=============================================================================
 
 
-
-//=============================================================================
-// ::::  Slider_reactive  ::::
-//=============================================================================
-
-//=============================================================================
-
-
-
 //=============================================================================
 // ::::  Slider  ::::
 //=============================================================================
 
-Slider::Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size) :
+Slider::Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size, Slider_reactive *win) :
 	Rectangle_window (pos, size, color),
 	cursor (),
-	axis (_axis)
+	axis (_axis),
+	window (win)
 {
 	Vector2p s_pos = pos;
 	if (axis == &Vector2p::x)
@@ -275,6 +267,24 @@ Slider::Slider (const Vector2p pos, const Vector2s size, const Color &color, int
 
 	slider = new Rectangle_button (clr_shm, s_pos, s_size);
 	subwindows.push_back (slider);
+}
+//_____________________________________________________________________________
+
+float Slider::get_percent ()
+{
+	Vector2p sz (size.x, size.y);
+	Vector2p s_sz (slider->get_size ().x, slider->get_size ().y);
+	return static_cast<float> (slider->get_position ().*axis - pos.*axis) / static_cast<float> (sz.*axis - s_sz.*axis);
+}
+//_____________________________________________________________________________
+
+void Slider::set_percent (float percent)
+{
+	Vector2p sz (size.x, size.y);
+	Vector2p s_sz (slider->get_size ().x, slider->get_size ().y);
+	Vector2p s_pos = slider->get_position ();
+	s_pos.*axis = static_cast<float> (sz.*axis - s_sz.*axis) * percent + static_cast<float> (pos.*axis);
+	slider->set_position (s_pos);
 }
 //_____________________________________________________________________________
 
@@ -317,6 +327,7 @@ bool Slider::on_mouse_release (const Event::Mouse_click &click)
 			new_pos.*axis = pos.*axis + sz.*axis - s_sz.*axis;
 
 		slider->set_position (new_pos);
+		window->on_slider_move (this);
 		return true;
 	}
 
@@ -340,6 +351,7 @@ bool Slider::on_mouse_move (const Event::Mouse_move &move)
 			new_pos.*axis = pos.*axis + sz.*axis - s_sz.*axis;
 
 		slider->set_position (new_pos);
+		window->on_slider_move (this);
 		return true;
 	}
 

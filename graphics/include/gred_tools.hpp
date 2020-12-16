@@ -37,7 +37,7 @@ class Abstract_tool
 {
 public:
 	//virtual void start_apply (Pixel_array &image, const Vector2p pos) = 0;
-	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop) = 0;
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop) = 0;
 	//virtual void stop_apply (Pixel_array &image, const Vector2p pos) = 0;
 
 };
@@ -50,7 +50,7 @@ class Pencil : public Abstract_tool
 {
 public:
 	//virtual void start_apply (Pixel_array &image, const Vector2p pos);
-	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop);
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop);
 	//virtual void stop_apply (Pixel_array &image, const Vector2p pos);
 };
 //=============================================================================
@@ -70,32 +70,53 @@ class Filler : public Abstract_tool
 public:
 	void fill_area (Pixel_array &image, Vector2p pos_0, const Color &color);
 
-	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop);
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop);
 };
 //=============================================================================
 
 
 
 //=============================================================================
-class Palette : public Rectangle_window, public Clickable
+class Pipette : public Abstract_tool
+{
+public:
+	virtual void apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop);
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Palette : public Rectangle_window, public Slider_reactive
 {
 protected:
+	enum
+	{
+		RED,
+		GREEN,
+		BLUE,
+		INDICATOR
+	};
+
 	Color frg_color;
 	Color bkg_color;
-	Pixel_array shade_field;
-	Pixel_array color_line;
+	Rectangle_window *indicator;
+	//Pixel_array shade_field;
+	//Pixel_array color_line;
+
 
 public:
 	static const Color palette_bkg_color;
-	static const Vector2s palette_size;
 	static const Vector2s shade_field_size;
 	static const Vector2s color_line_size;
 	
-	Palette (const Vector2p pos);
+	Palette ();
 
-	virtual bool handle_event (const Event &event);
-	virtual bool on_mouse_press   (const Event::Mouse_click &click);
-	virtual bool on_mouse_release (const Event::Mouse_click &click);
+	const Color get_tool_color ();
+	void set_tool_color (const Color &color);
+
+	virtual bool handle_event     (const Event &event);
+	virtual bool on_slider_move (Slider *slider);
 };
 //=============================================================================
 
@@ -134,6 +155,7 @@ protected:
 		PENCIL,
 		ERASER,
 		FILLER,
+		PIPETTE,
 		TOOLS_NUM,
 	};
 

@@ -11,26 +11,20 @@ int main (int argc, char *argv[])
 {
 	Application::initialize (Win_w, Win_h, "Native text");
 
-	Tool_manager tmg (nullptr);
+	Palette palette;
+	Tool_manager tmg (&palette);
 	Canvas canvas (Vector2p (Engine::get_size ().x / 8 + 30, 20), Vector2s (Engine::get_size ().x * 5 >> 3, Engine::get_size ().y - 40), &tmg);
 	Texture_button tbut ({"graphics/textures/test_button_released.png", "graphics/textures/test_button_hovered.png", "graphics/textures/test_button_pressed.png"}, {Win_w - 130, 10});
-	Rectangle_button rbut ({{0, 255, 0}, {50, 150, 50}, {0, 100, 0}}, {10, 300}, {50, 50});
-	Dragable_rectangle_window dragw ({100, 100}, {100, 100}, Color::Green);
-	Slider slider_x ({20, 500}, {200, 10}, Color::Black, &Vector2p::x, {{255, 0, 0}, {240, 0, 0}, {200, 0, 0}}, {20, 30});
 	
+	Event_system::attach (&palette);
 	Event_system::attach (&tmg);
 	Event_system::attach (&canvas);
 	Event_system::attach (&tbut);
-	Event_system::attach (&rbut);
-	Event_system::attach (&dragw);
-	Event_system::attach (&slider_x);
 
+	Event_system::attach_redraw (&palette);
 	Event_system::attach_redraw (&tmg);
 	Event_system::attach_redraw (&canvas);
 	Event_system::attach_redraw (&tbut);
-	Event_system::attach_redraw (&rbut);
-	Event_system::attach_redraw (&dragw);
-	Event_system::attach_redraw (&slider_x);
 
 	Vector2s size (128, 128);
 	bool growup = false;

@@ -7,6 +7,8 @@ class Button_reactive;
 class Abstract_button;
 class Rectangle_button;
 class Texture_button;
+class Slider_reactive;
+class Slider;
 
 
 #include "event_system.hpp"
@@ -125,11 +127,11 @@ public:
 //=============================================================================
 class Slider_reactive
 {
+public:
 	Slider_reactive () = default;
-
 	virtual ~Slider_reactive () = default;
 
-	virtual bool on_slider_move () = 0;
+	virtual bool on_slider_move (Slider *slider) = 0;
 };
 //=============================================================================
 
@@ -142,10 +144,14 @@ protected:
 	int cursor;
 	int16_t Vector2p::*axis;
 	Rectangle_button *slider;
+	Slider_reactive *window;
 
 public:
 	Slider () = default;
-	Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size);
+	Slider (const Vector2p pos, const Vector2s size, const Color &color, int16_t Vector2p::*_axis, const Color_scheme &clr_shm, const Vector2s s_size, Slider_reactive *win);
+
+	float get_percent ();
+	void set_percent (float percent);
 
 	virtual bool handle_event (const Event &event);
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);

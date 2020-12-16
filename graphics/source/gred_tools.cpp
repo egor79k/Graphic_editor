@@ -5,7 +5,7 @@
 // ::::  Pencil  ::::
 //=============================================================================
 
-void Pencil::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop)
+void Pencil::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop)
 {
 	int16_t x0 = pos_0.x;
 	int16_t y0 = pos_0.y;
@@ -82,7 +82,7 @@ void Filler::fill_area (Pixel_array &image, Vector2p pos_0, const Color &color)
 	image.set_pixel (pos_0.x, pos_0.y, color);*/
 }
 
-void Filler::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const Tool_properties &prop)
+void Filler::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop)
 {
 	//fill_area (image, pos_0, prop.color);
 }
@@ -94,33 +94,119 @@ void Filler::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, const To
 // ::::  Palette  ::::
 //=============================================================================
 
-const Color Palette::palette_bkg_color = Color (220, 220, 220);
-const Vector2s Palette::palette_size = {300, 400};
+void Pipette::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop)
+{
+	prop.color = image.get_pixel (pos_1.x, pos_1.y);
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Palette  ::::
+//=============================================================================
+
+const Color Palette::palette_bkg_color = Color (200, 200, 200);
 const Vector2s Palette::shade_field_size = {256, 256};
 const Vector2s Palette::color_line_size  = {256, 25};
 //_____________________________________________________________________________
 
-Palette::Palette (const Vector2p pos) :
-	Rectangle_window (pos, palette_size, palette_bkg_color),
-	shade_field (shade_field_size, Color::White),
-	color_line (color_line_size, Color::White)
+Palette::Palette () :
+	Rectangle_window (
+		Vector2p (Engine::get_size ().x - (Engine::get_size ().x * 3 >> 4), 0),
+		Vector2s (Engine::get_size ().x * 3 >> 4, Engine::get_size ().y),
+		palette_bkg_color),
+	frg_color (Color::Black),
+	bkg_color (Color::White)
+	//shade_field (shade_field_size, Color::White),
+	//color_line (color_line_size, Color::White)
 {
-	//for (int x = 0; x < color_line_size.x; ++x)
-	//	for (int y = 0; y < color_line_size.y; ++y)
-	//		color_line.set_pixel (x, y, Color (255, x))
+	subwindows.push_back (new Slider (
+		Vector2p (pos.x + 10, 500),
+		Vector2s (size.x - 20, 3),
+		Color::Red,
+		&Vector2p::x,
+		{Color::Black, {100, 0, 0}, {150, 0, 0}},
+		{7, 15},
+		this));
+
+	subwindows.push_back (new Slider (
+		Vector2p (pos.x + 10, 525),
+		Vector2s (size.x - 20, 3),
+		Color::Green,
+		&Vector2p::x,
+		{Color::Black, {0, 100, 0}, {0, 150, 0}},
+		{7, 15},
+		this));
+
+	subwindows.push_back (new Slider (
+		Vector2p (pos.x + 10, 550),
+		Vector2s (size.x - 20, 3),
+		Color::Blue,
+		&Vector2p::x,
+		{Color::Black, {0, 0, 100}, {0, 0, 150}},
+		{7, 15},
+		this));
+
+	indicator = new Rectangle_window (
+		Vector2p (pos.x + 10, 400),
+		{50, 50},
+		frg_color);
+
+	subwindows.push_back (indicator);
 }
+//_____________________________________________________________________________
+
+const Color Palette::get_tool_color ()
+{
+	return frg_color;
+}
+//_____________________________________________________________________________
+
+void Palette::set_tool_color (const Color &color)
+{
+	indicator->set_color (color);
+	reinterpret_cast<Slider *> (subwindows[RED])->set_percent (static_cast<float> (color.r) / 255.f);
+	reinterpret_cast<Slider *> (subwindows[GREEN])->set_percent (static_cast<float> (color.g) / 255.f);
+	reinterpret_cast<Slider *> (subwindows[BLUE])->set_percent (static_cast<float> (color.b) / 255.f);
+}
+//_____________________________________________________________________________
 
 bool Palette::handle_event (const Event &event)
 {
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			return true;
+
 	return false;
 }
-bool Palette::on_mouse_press   (const Event::Mouse_click &click)
+//_____________________________________________________________________________
+
+bool Palette::on_slider_move (Slider *slider)
 {
-	return false;
-}
-bool Palette::on_mouse_release (const Event::Mouse_click &click)
-{
-	return false;
+	int col_num = 0;
+
+	for (col_num; col_num < subwindows.size (); ++col_num)
+		if (subwindows[col_num] == slider)
+			break;
+
+	switch (col_num)
+	{
+		case RED:
+			frg_color.r = 255 * slider->get_percent ();
+			break;
+
+		case GREEN:
+			frg_color.g = 255 * slider->get_percent ();
+			break;
+
+		case BLUE:
+			frg_color.b = 255 * slider->get_percent ();
+			break;
+	}
+
+	indicator->set_color (frg_color);
+	return true;
 }
 //=============================================================================
 
@@ -205,6 +291,7 @@ const Texture_scheme Tool_manager::default_textures[] = {
 	{{"graphics/textures/graphic_tool_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{0, 0}, {64, 64}}}},
 	{{"graphics/textures/graphic_tool_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{64, 0}, {64, 64}}}},
 	{{"graphics/textures/graphic_tool_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{128, 0}, {64, 64}}}},
+	{{"graphics/textures/graphic_tool_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{192, 0}, {64, 64}}}}
 };
 //_____________________________________________________________________________
 
@@ -212,26 +299,30 @@ Tool_manager::Tool_manager (Palette *_palette) :
 	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x >> 3, Engine::get_size ().y), Palette::palette_bkg_color),
 	curr_tool (PENCIL),
 	start_pos (),
-	properties ({Color::Blue, 5}),
+	properties ({_palette->get_tool_color (), 5}),
 	tools (TOOLS_NUM),
 	applying (false),
-	//canvas (Vector2p (Engine::get_size ().x / 8 + 30, 20), Vector2s (Engine::get_size ().x * 5 >> 3, Engine::get_size ().y - 40)),
 	palette (_palette)
 {
-	//Event_system::attach_redraw (&canvas);
-
 	tools[PENCIL] = std::move (std::unique_ptr<Abstract_tool> (new Pencil));
 	tools[ERASER] = std::move (std::unique_ptr<Abstract_tool> (new Eraser));
 	tools[FILLER] = std::move (std::unique_ptr<Abstract_tool> (new Filler));
+	tools[PIPETTE] = std::move (std::unique_ptr<Abstract_tool> (new Pipette));
 
 	subwindows.push_back (new Texture_button (default_textures[PENCIL], {20, 64}, this));
 	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this));
 	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this));
+	subwindows.push_back (new Texture_button (default_textures[PIPETTE], {20, 256}, this));
 }
 //_____________________________________________________________________________
 
 void Tool_manager::start_apply (Canvas *canvas, Vector2p pos)
 {
+	if (curr_tool == ERASER)
+		properties.color = canvas->get_color ();
+	else
+		properties.color = palette->get_tool_color ();
+
 	start_pos = pos;
 	applying = true;
 }
@@ -239,10 +330,10 @@ void Tool_manager::start_apply (Canvas *canvas, Vector2p pos)
 
 void Tool_manager::apply (Canvas *canvas, Vector2p pos)
 {
-	if (curr_tool != ERASER)
-		tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
-	else
-		tools[curr_tool]->apply (canvas->image, start_pos, pos, {canvas->get_color (), properties.thickness});
+	tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
+
+	if (curr_tool == PIPETTE)
+		palette->set_tool_color (properties.color);
 
 	start_pos = pos;
 }
@@ -250,10 +341,10 @@ void Tool_manager::apply (Canvas *canvas, Vector2p pos)
 
 void Tool_manager::stop_apply (Canvas *canvas, Vector2p pos)
 {
-	if (curr_tool != ERASER)
-		tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
-	else
-		tools[curr_tool]->apply (canvas->image, start_pos, pos, {canvas->get_color (), properties.thickness});
+	tools[curr_tool]->apply (canvas->image, start_pos, pos, properties);
+
+	if (curr_tool == PIPETTE)
+		palette->set_tool_color (properties.color);
 
 	applying = false;
 }
@@ -273,54 +364,22 @@ bool Tool_manager::handle_event (const Event &event)
 
 	return handle_hoverable (event);
 }
+//_____________________________________________________________________________
 
 bool Tool_manager::on_mouse_press (const Event::Mouse_click &click)
 {
-/*	if (canvas.contains (click.x, click.y))
-	{
-		start_pos = Vector2p (click.x, click.y) - canvas.pos;
-		applying = true;
-		return true;
-	}
-*/
 	return false;
 }
 //_____________________________________________________________________________
 
 bool Tool_manager::on_mouse_release (const Event::Mouse_click &click)
 {
-/*	if (applying)
-	{
-		Vector2p curr_pos = Vector2p (click.x, click.y) - canvas.pos;
-		if (curr_tool != ERASER)
-			tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, properties);
-		else
-			tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, {canvas.get_color (), properties.thickness});
-
-		applying = false;
-		return true;
-	}
-*/
 	return false;
 }
 //_____________________________________________________________________________
 
 bool Tool_manager::on_mouse_move (const Event::Mouse_move &move)
 {
-/*	if (applying)
-	{
-		if (canvas.contains (move.x, move.y))
-		{
-			Vector2p curr_pos = Vector2p (move.x, move.y) - canvas.pos;
-			if (curr_tool != ERASER)
-				tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, properties);
-			else
-				tools[curr_tool]->apply (canvas.image, start_pos, curr_pos, {canvas.get_color (), properties.thickness});
-			start_pos = curr_pos;
-			return true;
-		}
-	}
-*/
 	return false;
 }
 //_____________________________________________________________________________
@@ -336,10 +395,10 @@ bool Tool_manager::on_button_release (Abstract_button *button)
 	if (button->hovered ())
 	{
 		int tool = 0;
-		for (tool; tool < subwindows.size (); ++tool)
+		for (tool; tool < TOOLS_NUM; ++tool)
 			if (subwindows[tool] == button)
 				break;
-		printf ("Tool %d choosed\n", tool);
+			
 		curr_tool = tool;
 		return true;
 	}
