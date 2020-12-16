@@ -29,7 +29,9 @@ class Canvas;
 
 
 #include <vector>
+
 #include "../EngineSet.hpp"
+#include "abstract_window.hpp"
 #include "vector2.hpp"
 #include "event.hpp"
 #include "event_system.hpp"
@@ -37,7 +39,7 @@ class Canvas;
 #include "pixel_array.hpp"
 
 
-
+/*
 //=============================================================================
 class Abstract_window
 {
@@ -51,20 +53,20 @@ public:
 
 	template<typename T, typename... Args>
 	void create_subwindow (Args&... args);
+	virtual bool handle_event (const Event &event);
 };
 //=============================================================================
-
+*/
 
 
 //=============================================================================
-class Window : public Abstract_window, public Drawable
+class Window : public Abstract_window
 {
 protected:
 	Vector2p pos;
 
 public:
 	Window () = default;
-	//virtual ~Window () = default;
 	Window (Vector2p _pos);
 	Window (int16_t x, int16_t y);
 

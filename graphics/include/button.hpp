@@ -9,8 +9,8 @@ class Rectangle_button;
 class Texture_button;
 
 
-#include "window.hpp"
 #include "event_system.hpp"
+#include "window.hpp"
 
 
 //=============================================================================
@@ -59,6 +59,8 @@ public:
 
 	virtual bool pressed () = 0;
 	virtual bool hovered () = 0;
+
+	virtual bool handle_event (const Event &event);
 };
 //=============================================================================
 

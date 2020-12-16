@@ -14,10 +14,21 @@
 }
 //_____________________________________________________________________________
 
-template<typename T, typename... Args>
-void Abstract_window::create_subwindow (Args&... args)
+bool Abstract_window::handle_event (const Event &event)
 {
-	subwindows.emplace_back (new T (args...));
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			return true;
+	return false;
+}
+//_____________________________________________________________________________
+
+void Abstract_window::handle_redraw ()
+{
+	on_redraw ();
+
+	for (auto win: subwindows)
+		win->handle_redraw ();
 }
 //=============================================================================
 

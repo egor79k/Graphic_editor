@@ -13,6 +13,16 @@ Abstract_button::Abstract_button (const Vector2p pos, Button_reactive *_window) 
 	//Event_system::attach_mouse_release (this);
 	//Event_system::attach_mouse_move (this);
 }
+//_____________________________________________________________________________
+
+bool Abstract_button::handle_event (const Event &event)
+{
+	for (auto win: subwindows)
+		if (win->handle_event (event))
+			return true;
+
+	return handle_hoverable (event);
+}
 //=============================================================================
 
 
