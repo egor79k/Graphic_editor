@@ -148,7 +148,7 @@ public:
 
 
 //=============================================================================
-class Tool_manager : public Rectangle_window, public Hoverable, public Button_reactive
+class Tool_manager : public Rectangle_window, public Button_reactive, public Slider_reactive
 {
 protected:
 	enum {
@@ -179,12 +179,11 @@ public:
 
 	bool is_applying ();
 
+	virtual void on_redraw ();
 	virtual bool handle_event     (const Event &event);
-	virtual bool on_mouse_press   (const Event::Mouse_click &click);
-	virtual bool on_mouse_release (const Event::Mouse_click &click);
-	virtual bool on_mouse_move    (const Event::Mouse_move &move);
 	virtual bool on_button_press   (Abstract_button *button);
 	virtual bool on_button_release (Abstract_button *button);
+	virtual bool on_slider_move (Slider *slider);
 };
 //=============================================================================
 

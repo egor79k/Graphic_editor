@@ -85,6 +85,7 @@ void Filler::fill_area (Pixel_array &image, Vector2p pos_0, const Color &color)
 void Filler::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_properties &prop)
 {
 	//fill_area (image, pos_0, prop.color);
+	image.fill (prop.color);
 }
 //=============================================================================
 
@@ -313,6 +314,15 @@ Tool_manager::Tool_manager (Palette *_palette) :
 	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this));
 	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this));
 	subwindows.push_back (new Texture_button (default_textures[PIPETTE], {20, 256}, this));
+
+	subwindows.push_back (new Slider (
+		Vector2p (size.x - 20, 20),
+		Vector2s (3, size.y - 40),
+		Color::Black,
+		&Vector2p::y,
+		{{130, 130, 130}, {100, 100, 100}, Color::Black},
+		{20, 10},
+		this));
 }
 //_____________________________________________________________________________
 
@@ -356,37 +366,28 @@ bool Tool_manager::is_applying ()
 }
 //_____________________________________________________________________________
 
+void Tool_manager::on_redraw ()
+{
+	Rectangle_window::on_redraw ();
+	char str[10] = {};
+	snprintf (str, 10, "%d", properties.thickness);
+	Engine::draw::text ({20, 500}, str, 30, Color::Black);
+}
+//_____________________________________________________________________________
+
 bool Tool_manager::handle_event (const Event &event)
 {
 	for (auto win: subwindows)
 		if (win->handle_event (event))
 			return true;
 
-	return handle_hoverable (event);
-}
-//_____________________________________________________________________________
-
-bool Tool_manager::on_mouse_press (const Event::Mouse_click &click)
-{
-	return false;
-}
-//_____________________________________________________________________________
-
-bool Tool_manager::on_mouse_release (const Event::Mouse_click &click)
-{
-	return false;
-}
-//_____________________________________________________________________________
-
-bool Tool_manager::on_mouse_move (const Event::Mouse_move &move)
-{
 	return false;
 }
 //_____________________________________________________________________________
 
 bool Tool_manager::on_button_press (Abstract_button *button)
 {
-	return true;
+	return false;
 }
 //_____________________________________________________________________________
 
@@ -398,11 +399,18 @@ bool Tool_manager::on_button_release (Abstract_button *button)
 		for (tool; tool < TOOLS_NUM; ++tool)
 			if (subwindows[tool] == button)
 				break;
-			
+
 		curr_tool = tool;
 		return true;
 	}
 
 	return false;
+}
+//_____________________________________________________________________________
+
+bool Tool_manager::on_slider_move (Slider *slider)
+{
+	properties.thickness = std::max (50 * slider->get_percent (), 1.f);
+	return true;
 }
 //=============================================================================
