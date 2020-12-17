@@ -23,7 +23,7 @@ void Event_system::dispatch_event ()
 	{
 		if (event.type == Event::Closed)
 			Engine::exit ();
-
+		
 		for (auto window: attached)
 			if (window->handle_event (event))
 				break;
@@ -76,30 +76,6 @@ void Event_system::detach_redraw (Abstract_window *window)
 //=============================================================================
 
 
-/*
-//=============================================================================
-// ::::  Drawable  ::::
-//=============================================================================
-
-Drawable::Drawable ()
-{
-	Event_system::attach_redraw (this);
-}
-//_____________________________________________________________________________
-
-Drawable::~Drawable ()
-{
-	Event_system::detach_redraw (this);
-}
-//_____________________________________________________________________________
-
-void Drawable::handle_redraw ()
-{
-	on_redraw ();
-}
-//=============================================================================
-*/
-
 
 //=============================================================================
 // ::::  Clickable  ::::
@@ -110,15 +86,12 @@ bool Clickable::handle_clickable (const Event &event)
 	switch (event.type)
 	{
 		case Event::Mouse_pressed:
-			if (on_mouse_press (event.mouse_click))
-				return true;
-			break;
+			return on_mouse_press (event.mouse_click);
 
 		case Event::Mouse_released:
-			if (on_mouse_release (event.mouse_click))
-				return true;
-			break;
+			return on_mouse_release (event.mouse_click);
 	}
+
 	return false;
 }
 //=============================================================================
@@ -134,20 +107,30 @@ bool Hoverable::handle_hoverable (const Event &event)
 	switch (event.type)
 	{
 		case Event::Mouse_pressed:
-			if (on_mouse_press (event.mouse_click))
-				return true;
-			break;
+			return on_mouse_press (event.mouse_click);
 
 		case Event::Mouse_released:
-			if (on_mouse_release (event.mouse_click))
-				return true;
-			break;
+			return on_mouse_release (event.mouse_click);
 
 		case Event::Mouse_moved:
-			if (on_mouse_move (event.mouse_move))
-				return true;
-			break;
+			return on_mouse_move (event.mouse_move);
 	}
+
+	return false;
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Textable  ::::
+//=============================================================================
+
+bool Textable::handle_textable (const Event &event)
+{
+	if (event.type == Event::Text_entered)
+		return on_text_enter (event.text);
+
 	return false;
 }
 //=============================================================================

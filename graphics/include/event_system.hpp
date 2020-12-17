@@ -48,20 +48,6 @@ public:
 //=============================================================================
 
 
-/*
-//=============================================================================
-class Drawable
-{
-public:
-	Drawable ();
-	virtual ~Drawable ();
-
-	virtual void handle_redraw ();
-	virtual void on_redraw () = 0;
-};
-//=============================================================================
-*/
-
 
 //=============================================================================
 class Clickable
@@ -87,6 +73,20 @@ public:
 
 	bool handle_hoverable (const Event &event);
 	virtual bool on_mouse_move (const Event::Mouse_move &move) = 0;
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Textable
+{
+public:
+	Textable () = default;
+	virtual ~Textable () = default;
+
+	bool handle_textable (const Event &event);
+	virtual bool on_text_enter (const Event::Text &text) = 0;
 };
 //=============================================================================
 

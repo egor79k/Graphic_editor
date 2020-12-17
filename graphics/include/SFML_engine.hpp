@@ -74,8 +74,10 @@ public:
 	{
 		static void rectangle (const Vector2p pos, const Vector2s size, const Color &col);
 		static void image (const Vector2p pos, const Pixel_array &image);
-		static void text (const Vector2p pos, const char *string, const int size, const Color &col);
+		static void text (const Vector2p pos, const char *string, const int size, const Color &col = Color::Black);
 	};
+
+	static void load_image ();
 };
 
 

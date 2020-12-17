@@ -8,6 +8,7 @@
 #include "include/event_system.hpp"
 #include "include/pixel_array.hpp"
 #include "include/scrollbar.hpp"
+#include "include/text_tools.hpp"
 #include "include/vector2.hpp"
 #include "include/window.hpp"
 

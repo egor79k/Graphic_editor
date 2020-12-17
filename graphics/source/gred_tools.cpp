@@ -166,6 +166,7 @@ const Color Palette::get_tool_color ()
 
 void Palette::set_tool_color (const Color &color)
 {
+	frg_color = color;
 	indicator->set_color (color);
 	reinterpret_cast<Slider *> (subwindows[RED])->set_percent (static_cast<float> (color.r) / 255.f);
 	reinterpret_cast<Slider *> (subwindows[GREEN])->set_percent (static_cast<float> (color.g) / 255.f);
