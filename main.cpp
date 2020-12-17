@@ -25,10 +25,10 @@ int main (int argc, char *argv[])
 	Event_system::attach_redraw (&tmg);
 	Event_system::attach_redraw (&canvas);
 	//Event_system::attach_redraw (&tbut);
-
+/*
 	Vector2s size (128, 128);
 	bool growup = false;
-/*
+
 	while (Engine::running ())
 	{
 		if (size.x == 128)

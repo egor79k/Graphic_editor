@@ -6,6 +6,13 @@
 #include "window.hpp"
 
 
+namespace Text
+{
+	const char Enter = 13;
+	const char Backspace = 8;
+};
+
+
 //=============================================================================
 class Text_window : public Rectangle_window
 {
@@ -35,10 +42,18 @@ class Text_field_reactive
 
 
 //=============================================================================
-class Text_field : public Text_window
+class Text_field : public Text_window, public Textable, public Clickable
 {
+protected:
+	bool active;
+
 public:
 	Text_field (const Vector2p pos, const Vector2s size);
+
+	virtual bool handle_event     (const Event &event);
+	virtual bool on_text_enter    (const Event::Text &symbol);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
 };
 //=============================================================================
 

@@ -7,7 +7,7 @@ sf::Font SFML_engine::text_font;
 void SFML_engine::initialize (int width, int height, const char *window_header)
 {
 	window.create (sf::VideoMode (width, height), window_header);
-	text_font.loadFromFile ("graphics/Crystal_Regular.ttf");
+	text_font.loadFromFile ("graphics/PF Scandal Pro Black Regular.ttf");
 }
 
 

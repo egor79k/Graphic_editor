@@ -86,7 +86,7 @@ public:
 	virtual ~Textable () = default;
 
 	bool handle_textable (const Event &event);
-	virtual bool on_text_enter (const Event::Text &text) = 0;
+	virtual bool on_text_enter (const Event::Text &symbol) = 0;
 };
 //=============================================================================
 

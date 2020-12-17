@@ -125,7 +125,7 @@ Palette::Palette () :
 	subwindows.push_back (new Slider (
 		Vector2p (pos.x + 10, 500),
 		Vector2s (size.x - 20, 3),
-		Color::Red,
+		Color (200, 0, 0),
 		&Vector2p::x,
 		{Color::Black, {100, 0, 0}, {150, 0, 0}},
 		{7, 15},
@@ -134,7 +134,7 @@ Palette::Palette () :
 	subwindows.push_back (new Slider (
 		Vector2p (pos.x + 10, 525),
 		Vector2s (size.x - 20, 3),
-		Color::Green,
+		Color (0, 200, 0),
 		&Vector2p::x,
 		{Color::Black, {0, 100, 0}, {0, 150, 0}},
 		{7, 15},
@@ -143,7 +143,7 @@ Palette::Palette () :
 	subwindows.push_back (new Slider (
 		Vector2p (pos.x + 10, 550),
 		Vector2s (size.x - 20, 3),
-		Color::Blue,
+		Color (0, 0, 200),
 		&Vector2p::x,
 		{Color::Black, {0, 0, 100}, {0, 0, 150}},
 		{7, 15},
@@ -316,14 +316,18 @@ Tool_manager::Tool_manager (Palette *_palette) :
 	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this));
 	subwindows.push_back (new Texture_button (default_textures[PIPETTE], {20, 256}, this));
 
-	subwindows.push_back (new Slider (
+	Slider *thickness_slider = new Slider (
 		Vector2p (size.x - 20, 20),
 		Vector2s (3, size.y - 40),
 		Color::Black,
 		&Vector2p::y,
 		{{130, 130, 130}, {100, 100, 100}, Color::Black},
 		{20, 10},
-		this));
+		this);
+
+	subwindows.push_back (thickness_slider);
+
+	thickness_slider->set_percent (static_cast<float> (properties.thickness) / 50.f);
 }
 //_____________________________________________________________________________
 
