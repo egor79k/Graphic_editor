@@ -16,8 +16,11 @@ public:
 	Abstract_window () = default;
 	virtual ~Abstract_window ();
 
-	virtual bool handle_event (const Event &event);
+	size_t add_subwindow (Abstract_window *win);
+	void remove_subwindow (Abstract_window *win);
+	void remove_subwindow (size_t num);
 
+	virtual bool handle_event (const Event &event);
 	virtual void handle_redraw ();
 	virtual void on_redraw () = 0;
 };

@@ -1,10 +1,31 @@
 #include "../include/text_tools.hpp"
 
+
 //=============================================================================
-// ::::  Text_window  ::::
+// ::::  Rectangle_text_window  ::::
 //=============================================================================
 
-Text_window::Text_window (
+Text_window::Text_window (const Vector2p pos, const char *str, const uint16_t _height, const Color &_color) :
+	Window (pos),
+	text (str),
+	height (_height),
+	color (_color)
+{}
+//_____________________________________________________________________________
+
+void Text_window::on_redraw ()
+{
+	Engine::draw::text (pos, text.data (), (height * 7) >> 3, color);
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Rectangle_text_window  ::::
+//=============================================================================
+
+Rectangle_text_window::Rectangle_text_window (
 	const Vector2p pos,
 	const char *str,
 	const Vector2s size,
@@ -16,7 +37,7 @@ Text_window::Text_window (
 {}
 //_____________________________________________________________________________
 
-void Text_window::on_redraw ()
+void Rectangle_text_window::on_redraw ()
 {
 	Rectangle_window::on_redraw ();
 	Engine::draw::text (pos, text.data (), (size.y * 7) >> 3, text_color);
@@ -31,9 +52,13 @@ void Text_window::on_redraw ()
 
 Text_field::Text_field (
 	const Vector2p pos,
-	const Vector2s size) :
-	Text_window (pos, "", size),
-	active (false)
+	const Vector2s size,
+	Text_field_reactive *win,
+	const Color &bkg_color,
+	const Color &text_color) :
+	Rectangle_text_window (pos, "", size, bkg_color, text_color),
+	active (false),
+	window (win)
 {}
 //_____________________________________________________________________________
 
@@ -64,13 +89,16 @@ bool Text_field::on_text_enter    (const Event::Text &symbol)
 	if (active)
 	{
 		if (symbol.unicode != Text::Enter)
+		{
 			if (symbol.unicode != Text::Backspace)
 				text.push_back (symbol.unicode);
 			else
 				if (text.size ())
 					text.pop_back ();
-		//else
-			// call-back to Textable window
+		}
+		else
+			window->on_text_enter (this, text.data ());
+		
 		return true;
 	}
 

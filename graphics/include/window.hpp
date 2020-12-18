@@ -39,26 +39,6 @@ class Texture_window;
 #include "pixel_array.hpp"
 
 
-/*
-//=============================================================================
-class Abstract_window
-{
-protected:
-	std::vector<Abstract_window *> subwindows;
-	//Abstract_window *parent_window;
-
-public:
-	Abstract_window () = default;
-	virtual ~Abstract_window ();
-
-	template<typename T, typename... Args>
-	void create_subwindow (Args&... args);
-	virtual bool handle_event (const Event &event);
-};
-//=============================================================================
-*/
-
-
 //=============================================================================
 class Window : public Abstract_window
 {

@@ -40,7 +40,6 @@ struct Button_scheme
 };
 
 typedef Button_scheme<Color> Color_scheme;
-typedef Button_scheme<const char *> Image_scheme;
 typedef Button_scheme<Engine::Texture> Texture_scheme;
 //=============================================================================
 

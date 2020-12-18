@@ -19,6 +19,7 @@ class Tool_manager;
 #include "button.hpp"
 #include "event_system.hpp"
 #include "pixel_array.hpp"
+#include "text_tools.hpp"
 #include "window.hpp"
 
 
@@ -106,7 +107,7 @@ protected:
 
 
 public:
-	static const Color palette_bkg_color;
+	static const Color default_bkg_color;
 	static const Vector2s shade_field_size;
 	static const Vector2s color_line_size;
 	
@@ -156,6 +157,7 @@ protected:
 		ERASER,
 		FILLER,
 		PIPETTE,
+		//PICTURE,
 		TOOLS_NUM,
 	};
 
@@ -168,9 +170,9 @@ protected:
 	//Canvas canvas;
 	Palette *palette;
 	
+public:
 	static const Texture_scheme default_textures[];
 
-public:
 	Tool_manager (Palette *_palette);
 
 	void start_apply (Canvas *canvas, Vector2p pos);
@@ -184,6 +186,35 @@ public:
 	virtual bool on_button_press   (Abstract_button *button);
 	virtual bool on_button_release (Abstract_button *button);
 	virtual bool on_slider_move (Slider *slider);
+};
+//=============================================================================
+
+
+
+//=============================================================================
+class Image_options_panel : public Rectangle_window, public Button_reactive, public Text_field_reactive
+{
+protected:
+	enum {
+		BIN,
+		NEW,
+		SAVE,
+		OPEN,
+		OPTIONS_NUM,
+	};
+
+	Canvas *canvas;
+	uint16_t active_temp_subwindow;
+
+public:
+	static const Texture_scheme default_textures[];
+	static const Color default_bkg_color;
+
+	Image_options_panel (Canvas *_canvas);
+
+	virtual bool on_button_press   (Abstract_button *button);
+	virtual bool on_button_release (Abstract_button *button);
+	virtual bool on_text_enter (Text_field *text_field, const char *text);
 };
 //=============================================================================
 

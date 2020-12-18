@@ -14,6 +14,44 @@
 }
 //_____________________________________________________________________________
 
+size_t Abstract_window::add_subwindow (Abstract_window *win)
+{
+	subwindows.push_back (win);
+	return subwindows.size () - 1;
+}
+//_____________________________________________________________________________
+
+void Abstract_window::remove_subwindow (Abstract_window *win)
+{
+	for (size_t i = 0; i < subwindows.size (); ++i)
+		if (subwindows[i] == win)
+		{
+			delete win;
+
+			for (i; i < subwindows.size () - 1; ++i)
+				subwindows[i] = subwindows[i + 1];
+
+			subwindows.pop_back ();
+
+			return;
+		}
+}
+//_____________________________________________________________________________
+
+void Abstract_window::remove_subwindow (size_t num)
+{
+	if (num < subwindows.size ())
+	{
+		delete subwindows[num];
+
+		for (size_t i = num; i < subwindows.size () - 1; ++i)
+			subwindows[i] = subwindows[i + 1];
+
+		subwindows.pop_back ();
+	}
+}
+//_____________________________________________________________________________
+
 bool Abstract_window::handle_event (const Event &event)
 {
 	for (auto win: subwindows)

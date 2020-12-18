@@ -107,16 +107,16 @@ void Pipette::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_pr
 // ::::  Palette  ::::
 //=============================================================================
 
-const Color Palette::palette_bkg_color = Color (200, 200, 200);
+const Color Palette::default_bkg_color = Color (150, 150, 150);
 const Vector2s Palette::shade_field_size = {256, 256};
 const Vector2s Palette::color_line_size  = {256, 25};
 //_____________________________________________________________________________
 
 Palette::Palette () :
 	Rectangle_window (
-		Vector2p (Engine::get_size ().x - (Engine::get_size ().x * 3 >> 4), 0),
-		Vector2s (Engine::get_size ().x * 3 >> 4, Engine::get_size ().y),
-		palette_bkg_color),
+		Vector2p (Engine::get_size ().x - (Engine::get_size ().x * 3 >> 4) + 10, Engine::get_size ().y >> 1),
+		Vector2s ((Engine::get_size ().x * 3 >> 4) - 20, (Engine::get_size ().y >> 1) - 20),
+		default_bkg_color),
 	frg_color (Color::Black),
 	bkg_color (Color::White)
 	//shade_field (shade_field_size, Color::White),
@@ -293,12 +293,13 @@ const Texture_scheme Tool_manager::default_textures[] = {
 	{{"graphics/textures/graphic_tool_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{0, 0}, {64, 64}}}},
 	{{"graphics/textures/graphic_tool_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{64, 0}, {64, 64}}}},
 	{{"graphics/textures/graphic_tool_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{128, 0}, {64, 64}}}},
-	{{"graphics/textures/graphic_tool_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{192, 0}, {64, 64}}}}
+	{{"graphics/textures/graphic_tool_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{192, 0}, {64, 64}}}},
+	{{"graphics/textures/graphic_tool_set_released.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{256, 0}, {64, 64}}}}
 };
 //_____________________________________________________________________________
 
 Tool_manager::Tool_manager (Palette *_palette) :
-	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x >> 3, Engine::get_size ().y), Palette::palette_bkg_color),
+	Rectangle_window (Vector2p (0, 0), Vector2s (Engine::get_size ().x >> 3, Engine::get_size ().y), Image_options_panel::default_bkg_color),
 	curr_tool (PENCIL),
 	start_pos (),
 	properties ({_palette->get_tool_color (), 5}),
@@ -417,5 +418,87 @@ bool Tool_manager::on_slider_move (Slider *slider)
 {
 	properties.thickness = std::max (50 * slider->get_percent (), 1.f);
 	return true;
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Image_options_panel  ::::
+//=============================================================================
+
+const Texture_scheme Image_options_panel::default_textures[] = {
+	{{"graphics/textures/image_options_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{0, 0}, {64, 64}}}},
+	{{"graphics/textures/image_options_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{64, 0}, {64, 64}}}},
+	{{"graphics/textures/image_options_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{128, 0}, {64, 64}}}},
+	{{"graphics/textures/image_options_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{192, 0}, {64, 64}}}},
+};
+
+const Color Image_options_panel::default_bkg_color (200, 200, 200);
+//_____________________________________________________________________________
+
+Image_options_panel::Image_options_panel (Canvas *_canvas) :
+	Rectangle_window (
+		Vector2p (Engine::get_size ().x - (Engine::get_size ().x * 3 >> 4), 0),
+		Vector2s (Engine::get_size ().x * 3 >> 4, Engine::get_size ().y),
+		default_bkg_color),
+	canvas (_canvas),
+	active_temp_subwindow (0)
+{
+	subwindows.push_back (new Texture_button (default_textures[BIN], Vector2p (pos.x + 20, 84), this));
+	subwindows.push_back (new Texture_button (default_textures[NEW], Vector2p (pos.x + 20, 20), this));
+	subwindows.push_back (new Texture_button (default_textures[SAVE], Vector2p (pos.x + 84, 20), this));
+	subwindows.push_back (new Texture_button (default_textures[OPEN], Vector2p (pos.x + 148, 20), this));
+}
+//_____________________________________________________________________________
+
+bool Image_options_panel::on_button_press   (Abstract_button *button)
+{
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Image_options_panel::on_button_release (Abstract_button *button)
+{
+	if (button->hovered ())
+	{
+		int option = -1;
+		for (option; option < OPTIONS_NUM; ++option)
+			if (subwindows[option] == button)
+				break;
+
+		switch (option)
+		{
+			case BIN:
+				canvas->clear ();
+				break;
+
+			case NEW:
+				canvas->clear ();
+				break;
+
+			case SAVE:
+				active_temp_subwindow = add_subwindow (new Text_field ({200, 200}, {300, 30}, this, Palette::default_bkg_color, Color (255, 0, 175)));
+				break;
+
+			case OPEN:
+				remove_subwindow (active_temp_subwindow);
+				break;
+
+			default:
+				return false;
+		}
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Image_options_panel::on_text_enter (Text_field *text_field, const char *text)
+{
+	printf ("Entered: %s\n", text);
+	remove_subwindow (active_temp_subwindow);
+	return false;
 }
 //=============================================================================
