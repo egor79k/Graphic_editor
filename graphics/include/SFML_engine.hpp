@@ -77,7 +77,8 @@ public:
 		static void text (const Vector2p pos, const char *string, const int size, const Color &col = Color::Black);
 	};
 
-	static void load_image ();
+	static bool load_image (Pixel_array &image, const char *name);
+	static bool save_image (const Pixel_array &image, const char *name);
 };
 
 

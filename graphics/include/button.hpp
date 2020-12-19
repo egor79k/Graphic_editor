@@ -102,9 +102,11 @@ protected:
 	Vector2s size;
 	Engine::Texture *curr_texture;
 	Texture_scheme texture;
+	Vector2p last_hover_pos;
+	const char *annotation;
 
 public:
-	Texture_button (const Texture_scheme &_texture, const Vector2p pos, Button_reactive *window = nullptr);
+	Texture_button (const Texture_scheme &_texture, const Vector2p pos, Button_reactive *window = nullptr, const char *_annotation = nullptr);
 
 	virtual void on_redraw ();
 	virtual bool on_mouse_press   (const Event::Mouse_click &click);

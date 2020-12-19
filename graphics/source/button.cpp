@@ -140,9 +140,10 @@ const Vector2s Rectangle_button::get_size ()
 // ::::  Texture_button  ::::
 //=============================================================================
 
-Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p pos, Button_reactive *window) :
+Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p pos, Button_reactive *window, const char *_annotation) :
 	Abstract_button (pos, window),
-	texture (_texture)
+	texture (_texture),
+	annotation (_annotation)
 {
 	curr_texture = &texture.released;
 	size = curr_texture->get_size ();
@@ -152,6 +153,8 @@ Texture_button::Texture_button (const Texture_scheme &_texture, const Vector2p p
 void Texture_button::on_redraw ()
 {
 	curr_texture->draw_sprite (pos, size);
+	if (hovered () && annotation != nullptr)
+		Engine::draw::text (last_hover_pos + Vector2p (10, 15), annotation, 17);
 }
 //_____________________________________________________________________________
 
@@ -203,6 +206,7 @@ bool Texture_button::on_mouse_move (const Event::Mouse_move &move)
 		if (contains (move.x, move.y))
 		{
 			curr_texture = &texture.hovered;
+			last_hover_pos = Vector2p (move.x, move.y);
 			return false;
 			// If return true problem with hovering neighbour buttons
 		}

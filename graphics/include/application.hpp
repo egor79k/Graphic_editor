@@ -12,11 +12,14 @@ class Application;
 
 //=============================================================================
 class Application
-{	
+{
+private:
+	static Color bkg_color;
+
 public:
 	Application () = delete;
 
-	static void initialize (int width, int height, const char *window_header);
+	static void initialize (int width, int height, const char *window_header, const Color &color = Color::Black);
 
 	static void step ();
 

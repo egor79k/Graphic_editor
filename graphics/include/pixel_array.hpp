@@ -24,6 +24,8 @@ public:
 	const Color &get_pixel (const uint16_t x, const uint16_t y) const;
 
 	void fill (const Color &color);
+	void copy_from (const uint16_t width, const uint16_t height, const uint8_t *image);
+	void resize (const uint16_t width, const uint16_t height, const Color &color);
 
 	const Vector2s get_size () const;
 

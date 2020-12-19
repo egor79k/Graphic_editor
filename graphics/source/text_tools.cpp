@@ -62,6 +62,18 @@ Text_field::Text_field (
 {}
 //_____________________________________________________________________________
 
+bool Text_field::is_active ()
+{
+	return active;
+}
+//_____________________________________________________________________________
+
+void Text_field::set_active (const bool cond)
+{
+	active = cond;
+}
+//_____________________________________________________________________________
+
 bool Text_field::handle_event (const Event &event)
 {
 	for (auto win: subwindows)
@@ -120,6 +132,58 @@ bool Text_field::on_mouse_press   (const Event::Mouse_click &click)
 
 bool Text_field::on_mouse_release (const Event::Mouse_click &click)
 {
+	return false;
+}
+//=============================================================================
+
+
+
+//=============================================================================
+// ::::  Text_dialog_window  ::::
+//=============================================================================
+
+const Color_scheme Text_dialog_window::default_accept_button_scheme = {Color (0, 180, 0), Color (0, 160, 0), Color (0, 140, 0)};
+//_____________________________________________________________________________
+
+Text_dialog_window::Text_dialog_window (const Vector2p pos, const Vector2s size, const Color &color, const char *question, Text_field_reactive *win) :
+	Rectangle_window (pos, size, color),
+	text_field (new Text_field (
+		Vector2p (pos.x + 10, pos.y + (size.y >> 1)),
+		Vector2s (size.x - (size.y >> 1) - 20, (size.y >> 1) - 10),
+		win))
+{
+	subwindows.push_back (new Text_window (pos, question, (size.y >> 1) - 10));
+
+	Vector2p field_pos = text_field->get_position ();
+	Vector2s field_size = text_field->get_size ();
+
+	subwindows.push_back (new Rectangle_button (
+		default_accept_button_scheme,
+		Vector2p (field_pos.x + field_size.x, field_pos.y),
+		Vector2s (field_size.y, field_size.y),
+		this));
+
+	subwindows.push_back (text_field);
+}
+//_____________________________________________________________________________
+
+bool Text_dialog_window::on_button_press   (Abstract_button *button)
+{
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Text_dialog_window::on_button_release (Abstract_button *button)
+{
+	if (button->hovered ())
+	{
+		Event text_event = {};
+		text_event.text.unicode = Text::Enter;
+		text_field->set_active (true);
+		text_field->on_text_enter (text_event.text);
+		return true;
+	}
+
 	return false;
 }
 //=============================================================================

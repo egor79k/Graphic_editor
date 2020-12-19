@@ -199,3 +199,25 @@ void SFML_engine::draw::text (const Vector2p pos, const char *string, const int 
 	text_str.setPosition (pos.x, pos.y);
 	window.draw (text_str);
 }
+
+
+bool SFML_engine::load_image (Pixel_array &image, const char *name)
+{
+	sf::Image img;
+	
+	if (img.loadFromFile (std::string (name)))
+	{
+		image.copy_from (img.getSize ().x, img.getSize ().y, img.getPixelsPtr ());
+		return true;
+	}
+
+	return false;
+}
+
+
+bool SFML_engine::save_image (const Pixel_array &image, const char *name)
+{
+	sf::Image img;
+	img.create (image.get_size ().x, image.get_size ().y, image.get_origin ());
+	return img.saveToFile (std::string (name));
+}

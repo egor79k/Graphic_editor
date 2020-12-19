@@ -108,7 +108,9 @@ void Pipette::apply (Pixel_array &image, Vector2p pos_0, Vector2p pos_1, Tool_pr
 //=============================================================================
 
 const Color Palette::default_bkg_color = Color (150, 150, 150);
-const Vector2s Palette::shade_field_size = {256, 256};
+const Vector2s Palette::shade_field_size = {198, 198};
+const Vector2p Palette::shade_field_pos = {10, 10};
+const char *Palette::default_shade_field = "graphics/textures/gradient_198.png";
 const Vector2s Palette::color_line_size  = {256, 25};
 //_____________________________________________________________________________
 
@@ -118,12 +120,12 @@ Palette::Palette () :
 		Vector2s ((Engine::get_size ().x * 3 >> 4) - 20, (Engine::get_size ().y >> 1) - 20),
 		default_bkg_color),
 	frg_color (Color::Black),
-	bkg_color (Color::White)
-	//shade_field (shade_field_size, Color::White),
+	bkg_color (Color::White),
+	shade_field (shade_field_size, Color::White)
 	//color_line (color_line_size, Color::White)
 {
 	subwindows.push_back (new Slider (
-		Vector2p (pos.x + 10, 500),
+		Vector2p (pos.x + 10, pos.y + shade_field_size.y + 30),
 		Vector2s (size.x - 20, 3),
 		Color (200, 0, 0),
 		&Vector2p::x,
@@ -132,7 +134,7 @@ Palette::Palette () :
 		this));
 
 	subwindows.push_back (new Slider (
-		Vector2p (pos.x + 10, 525),
+		Vector2p (pos.x + 10, pos.y + shade_field_size.y + 55),
 		Vector2s (size.x - 20, 3),
 		Color (0, 200, 0),
 		&Vector2p::x,
@@ -141,7 +143,7 @@ Palette::Palette () :
 		this));
 
 	subwindows.push_back (new Slider (
-		Vector2p (pos.x + 10, 550),
+		Vector2p (pos.x + 10, pos.y + shade_field_size.y + 80),
 		Vector2s (size.x - 20, 3),
 		Color (0, 0, 200),
 		&Vector2p::x,
@@ -150,11 +152,72 @@ Palette::Palette () :
 		this));
 
 	indicator = new Rectangle_window (
-		Vector2p (pos.x + 10, 400),
-		{50, 50},
+		Vector2p (pos.x + 10, pos.y + size.y - 35),
+		Vector2s (size.x - 20, 25),
 		frg_color);
 
 	subwindows.push_back (indicator);
+
+	Engine::load_image (shade_field, default_shade_field);
+/*
+	struct gradient_opt
+	{
+		uint8_t Color::*curr;
+		bool grow;
+	};
+
+	gradient_opt grad[] = {
+		{&Color::g, true},
+		{&Color::r, false},
+		{&Color::b, true},
+		{&Color::g, false},
+		{&Color::r, true},
+		{&Color::b, false},
+	};
+
+	Color curr_col = Color::Red;
+
+	int col_iter_num = static_cast<int> (floor (static_cast<double> (shade_field_size.x) / 6));
+	int col_step = static_cast<int> (floor (255 / static_cast<double> (col_iter_num)));
+
+	for (int x = 0; x < shade_field_size.x; ++x)
+	{
+		gradient_opt curr_grad = grad[static_cast<int> (floor (static_cast<double> (x) / col_iter_num))];
+		uint8_t Color::*col_ptr = curr_grad.curr;
+
+		if (curr_grad.grow)
+			curr_col.*col_ptr += col_step;
+		else
+			curr_col.*col_ptr -= col_step;
+
+		uint16_t median = shade_field_size.y >> 1;
+		Color shaded_col = curr_col;
+		Color shade_opt = Color::White;
+
+		for (int y = median; y < shade_field_size.y; ++y)
+		{
+			shade_field.set_pixel (x, y, shaded_col);
+			shaded_col *= shade_opt;
+			if (!(y % 8))
+				shade_opt -= Color (1, 1, 1, 0);
+		}
+
+		shaded_col = curr_col;
+
+		for (int y = median; y >= 0; --y)
+		{
+			shade_field.set_pixel (x, y, shaded_col);
+			
+			if (shaded_col.r < 255)
+				++shaded_col.r;
+
+			if (shaded_col.g < 255)
+				++shaded_col.g;
+
+			if (shaded_col.b < 255)
+				++shaded_col.b;
+		}
+	}*/
 }
 //_____________________________________________________________________________
 
@@ -174,13 +237,20 @@ void Palette::set_tool_color (const Color &color)
 }
 //_____________________________________________________________________________
 
+void Palette::on_redraw ()
+{
+	Rectangle_window::on_redraw ();
+	Engine::draw::image (pos + shade_field_pos, shade_field);
+}
+//_____________________________________________________________________________
+
 bool Palette::handle_event (const Event &event)
 {
 	for (auto win: subwindows)
 		if (win->handle_event (event))
 			return true;
 
-	return false;
+	return handle_clickable (event);
 }
 //_____________________________________________________________________________
 
@@ -210,6 +280,25 @@ bool Palette::on_slider_move (Slider *slider)
 	indicator->set_color (frg_color);
 	return true;
 }
+//_____________________________________________________________________________
+
+bool Palette::on_mouse_press   (const Event::Mouse_click &click)
+{
+	if ((pos.x + shade_field_pos.x) < click.x && click.x < (pos.x + shade_field_pos.x + shade_field_size.x) && (pos.y + shade_field_pos.y) < click.y && click.y < (pos.y + shade_field_pos.y + shade_field_size.y))
+	{
+		set_tool_color (shade_field.get_pixel (click.x - pos.x - shade_field_pos.x, click.y - pos.y - shade_field_pos.y));
+
+		return true;
+	}
+
+	return false;
+}
+//_____________________________________________________________________________
+
+bool Palette::on_mouse_release (const Event::Mouse_click &click)
+{
+	return false;
+}
 //=============================================================================
 
 
@@ -228,6 +317,19 @@ Canvas::Canvas (const Vector2p pos, const Vector2s size, Tool_manager *_tool_man
 void Canvas::clear ()
 {
 	image.fill (color);
+}
+//_____________________________________________________________________________
+
+void Canvas::resize (const uint16_t width, const uint16_t height)
+{
+	size = {width, height};
+	image.resize (width, height, Color::White);
+}
+//_____________________________________________________________________________
+
+const Pixel_array &Canvas::get_origin () const
+{
+	return image;
 }
 //_____________________________________________________________________________
 
@@ -290,11 +392,11 @@ bool Canvas::on_mouse_move    (const Event::Mouse_move &move)
 //=============================================================================
 
 const Texture_scheme Tool_manager::default_textures[] = {
-	{{"graphics/textures/graphic_tool_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{0, 0}, {64, 64}}}},
-	{{"graphics/textures/graphic_tool_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{64, 0}, {64, 64}}}},
-	{{"graphics/textures/graphic_tool_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{128, 0}, {64, 64}}}},
 	{{"graphics/textures/graphic_tool_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{192, 0}, {64, 64}}}},
-	{{"graphics/textures/graphic_tool_set_released.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{256, 0}, {64, 64}}}}
+	{{"graphics/textures/graphic_tool_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{128, 0}, {64, 64}}}},
+	{{"graphics/textures/graphic_tool_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{64, 0}, {64, 64}}}},
+	{{"graphics/textures/graphic_tool_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{0, 0}, {64, 64}}}}
+	//{{"graphics/textures/graphic_tool_set_released.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_hovered.png", {{256, 0}, {64, 64}}}, {"graphics/textures/graphic_tool_set_pressed.png", {{256, 0}, {64, 64}}}}
 };
 //_____________________________________________________________________________
 
@@ -312,10 +414,10 @@ Tool_manager::Tool_manager (Palette *_palette) :
 	tools[FILLER] = std::move (std::unique_ptr<Abstract_tool> (new Filler));
 	tools[PIPETTE] = std::move (std::unique_ptr<Abstract_tool> (new Pipette));
 
-	subwindows.push_back (new Texture_button (default_textures[PENCIL], {20, 64}, this));
-	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this));
-	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this));
-	subwindows.push_back (new Texture_button (default_textures[PIPETTE], {20, 256}, this));
+	subwindows.push_back (new Texture_button (default_textures[PIPETTE], {20, 256}, this, "Pipette"));
+	subwindows.push_back (new Texture_button (default_textures[FILLER], {20, 192}, this, "Filler"));
+	subwindows.push_back (new Texture_button (default_textures[ERASER], {20, 128}, this, "Eraser"));
+	subwindows.push_back (new Texture_button (default_textures[PENCIL], {20, 64}, this, "Pencil"));
 
 	Slider *thickness_slider = new Slider (
 		Vector2p (size.x - 20, 20),
@@ -375,9 +477,9 @@ bool Tool_manager::is_applying ()
 void Tool_manager::on_redraw ()
 {
 	Rectangle_window::on_redraw ();
-	char str[10] = {};
-	snprintf (str, 10, "%d", properties.thickness);
-	Engine::draw::text ({20, 500}, str, 30, Color::Black);
+	char str[20] = {};
+	snprintf (str, 20, "thickness: %d", properties.thickness);
+	Engine::draw::text ({10, 500}, str, 17, Color::Black);
 }
 //_____________________________________________________________________________
 
@@ -429,9 +531,9 @@ bool Tool_manager::on_slider_move (Slider *slider)
 
 const Texture_scheme Image_options_panel::default_textures[] = {
 	{{"graphics/textures/image_options_set_released.png", {{0, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{0, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{0, 0}, {64, 64}}}},
-	{{"graphics/textures/image_options_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{64, 0}, {64, 64}}}},
-	{{"graphics/textures/image_options_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{128, 0}, {64, 64}}}},
 	{{"graphics/textures/image_options_set_released.png", {{192, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{192, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{192, 0}, {64, 64}}}},
+	{{"graphics/textures/image_options_set_released.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{128, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{128, 0}, {64, 64}}}},
+	{{"graphics/textures/image_options_set_released.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_hovered.png", {{64, 0}, {64, 64}}}, {"graphics/textures/image_options_set_pressed.png", {{64, 0}, {64, 64}}}},
 };
 
 const Color Image_options_panel::default_bkg_color (200, 200, 200);
@@ -443,12 +545,12 @@ Image_options_panel::Image_options_panel (Canvas *_canvas) :
 		Vector2s (Engine::get_size ().x * 3 >> 4, Engine::get_size ().y),
 		default_bkg_color),
 	canvas (_canvas),
-	active_temp_subwindow (0)
+	active_subwindow_type (-1)
 {
-	subwindows.push_back (new Texture_button (default_textures[BIN], Vector2p (pos.x + 20, 84), this));
-	subwindows.push_back (new Texture_button (default_textures[NEW], Vector2p (pos.x + 20, 20), this));
-	subwindows.push_back (new Texture_button (default_textures[SAVE], Vector2p (pos.x + 84, 20), this));
-	subwindows.push_back (new Texture_button (default_textures[OPEN], Vector2p (pos.x + 148, 20), this));
+	subwindows.push_back (new Texture_button (default_textures[BIN], Vector2p (pos.x + 20, 84), this, "Clear"));
+	subwindows.push_back (new Texture_button (default_textures[OPEN], Vector2p (pos.x + 148, 20), this, "Open"));
+	subwindows.push_back (new Texture_button (default_textures[SAVE], Vector2p (pos.x + 84, 20), this, "Save"));
+	subwindows.push_back (new Texture_button (default_textures[NEW], Vector2p (pos.x + 20, 20), this, "New"));
 }
 //_____________________________________________________________________________
 
@@ -474,15 +576,22 @@ bool Image_options_panel::on_button_release (Abstract_button *button)
 				break;
 
 			case NEW:
+				if (subwindows.size () == OPTIONS_NUM)
+					add_subwindow (new Text_dialog_window ({200, 200}, {500, 70}, Palette::default_bkg_color, "Enter new canvas size", this));
+				active_subwindow_type = NEW;
 				canvas->clear ();
 				break;
 
 			case SAVE:
-				active_temp_subwindow = add_subwindow (new Text_field ({200, 200}, {300, 30}, this, Palette::default_bkg_color, Color (255, 0, 175)));
+				if (subwindows.size () == OPTIONS_NUM)
+					add_subwindow (new Text_dialog_window ({200, 200}, {500, 70}, Palette::default_bkg_color, "Enter saving file name", this));
+				active_subwindow_type = SAVE;
 				break;
 
 			case OPEN:
-				remove_subwindow (active_temp_subwindow);
+				if (subwindows.size () == OPTIONS_NUM)
+					add_subwindow (new Text_dialog_window ({200, 200}, {500, 70}, Palette::default_bkg_color, "Enter opening file name", this));
+				active_subwindow_type = OPEN;
 				break;
 
 			default:
@@ -497,8 +606,32 @@ bool Image_options_panel::on_button_release (Abstract_button *button)
 
 bool Image_options_panel::on_text_enter (Text_field *text_field, const char *text)
 {
-	printf ("Entered: %s\n", text);
-	remove_subwindow (active_temp_subwindow);
-	return false;
+	switch (active_subwindow_type)
+	{
+		case NEW:
+		{
+			uint16_t width = 0;
+			uint16_t height = 0;
+
+			sscanf (text, "%hu %hu", &width, &height);
+
+			canvas->resize (width, height);
+			break;
+		}
+
+		case SAVE:
+			Engine::save_image (canvas->get_origin (), text);
+			break;
+
+		case OPEN:
+			Engine::load_image (canvas->image, text);
+
+			break;
+	}
+
+	if (subwindows.size () > OPTIONS_NUM)
+		remove_subwindow (ACTIVE_SUBWINDOW);
+
+	return true;
 }
 //=============================================================================

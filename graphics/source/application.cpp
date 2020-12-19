@@ -5,9 +5,13 @@
 // ::::  Application  ::::
 //=============================================================================
 
-void Application::initialize (int width, int height, const char *window_header)
+Color Application::bkg_color;
+//-----------------------------------------------------------------------------
+
+void Application::initialize (int width, int height, const char *window_header, const Color &color)
 {
 	Engine::initialize (width, height, window_header);
+	bkg_color = color;
 }
 //-----------------------------------------------------------------------------
 	
@@ -15,7 +19,7 @@ void Application::step ()
 {
 	Event_system::dispatch_event ();
 
-	Engine::fill (Color (80, 80, 80));
+	Engine::fill (bkg_color);
 	
 	Event_system::dispatch_redraw ();
 
@@ -29,7 +33,7 @@ void Application::run ()
 	{
 		Event_system::dispatch_event ();
 
-		Engine::fill (Color::Black);
+		Engine::fill (bkg_color);
 
 		Event_system::dispatch_redraw ();
 

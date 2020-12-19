@@ -9,7 +9,7 @@ const int Win_h = 720;
 
 int main (int argc, char *argv[])
 {
-	Application::initialize (Win_w, Win_h, "GLELK Graphic editor");
+	Application::initialize (Win_w, Win_h, "GLELK Graphic editor", Color (80, 80, 80));
 
 	Palette palette;
 	Tool_manager tmg (&palette);

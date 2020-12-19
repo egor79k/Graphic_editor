@@ -88,7 +88,7 @@ public:
 
 
 //=============================================================================
-class Palette : public Rectangle_window, public Slider_reactive
+class Palette : public Rectangle_window, public Slider_reactive, public Clickable
 {
 protected:
 	enum
@@ -102,13 +102,15 @@ protected:
 	Color frg_color;
 	Color bkg_color;
 	Rectangle_window *indicator;
-	//Pixel_array shade_field;
+	Pixel_array shade_field;
 	//Pixel_array color_line;
 
 
 public:
 	static const Color default_bkg_color;
 	static const Vector2s shade_field_size;
+	static const Vector2p shade_field_pos;
+	static const char *default_shade_field;
 	static const Vector2s color_line_size;
 	
 	Palette ();
@@ -116,8 +118,12 @@ public:
 	const Color get_tool_color ();
 	void set_tool_color (const Color &color);
 
+	virtual void on_redraw ();
+
 	virtual bool handle_event     (const Event &event);
 	virtual bool on_slider_move (Slider *slider);
+	virtual bool on_mouse_press   (const Event::Mouse_click &click);
+	virtual bool on_mouse_release (const Event::Mouse_click &click);
 };
 //=============================================================================
 
@@ -134,6 +140,8 @@ public:
 	Canvas (const Vector2p pos, const Vector2s size, Tool_manager *_tool_manager, const Color &color = Color::White);
 
 	void clear ();
+	void resize (const uint16_t width, const uint16_t height);
+	const Pixel_array &get_origin () const;
 
 	virtual void on_redraw ();
 
@@ -143,6 +151,7 @@ public:
 	virtual bool on_mouse_move    (const Event::Mouse_move &move);
 
 	friend class Tool_manager;
+	friend class Image_options_panel;
 };
 //=============================================================================
 
@@ -153,10 +162,10 @@ class Tool_manager : public Rectangle_window, public Button_reactive, public Sli
 {
 protected:
 	enum {
-		PENCIL,
-		ERASER,
-		FILLER,
 		PIPETTE,
+		FILLER,
+		ERASER,
+		PENCIL,
 		//PICTURE,
 		TOOLS_NUM,
 	};
@@ -197,14 +206,15 @@ class Image_options_panel : public Rectangle_window, public Button_reactive, pub
 protected:
 	enum {
 		BIN,
-		NEW,
-		SAVE,
 		OPEN,
+		SAVE,
+		NEW,
 		OPTIONS_NUM,
+		ACTIVE_SUBWINDOW = OPTIONS_NUM
 	};
 
 	Canvas *canvas;
-	uint16_t active_temp_subwindow;
+	int active_subwindow_type;
 
 public:
 	static const Texture_scheme default_textures[];
